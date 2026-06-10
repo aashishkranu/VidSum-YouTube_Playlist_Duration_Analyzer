@@ -1,0 +1,2812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidSum</title>
+    
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables - Premium Color Palette */
+        :root {
+            --bg-deep: #080A10;
+            --bg-surface: rgba(18, 22, 37, 0.75);
+            --bg-surface-elevated: rgba(30, 37, 60, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(255, 62, 108, 0.15);
+            
+            --accent-coral: #FF3E6C;
+            --accent-coral-rgb: 255, 62, 108;
+            --accent-violet: #7C3AED;
+            --accent-violet-rgb: 124, 58, 237;
+            --accent-cyan: #00F2FE;
+            --accent-cyan-rgb: 0, 242, 254;
+            
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            
+            --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 24px;
+            
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.5);
+            --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.7);
+            --glow-coral: 0 0 25px rgba(255, 62, 108, 0.25);
+            --glow-cyan: 0 0 25px rgba(0, 242, 254, 0.25);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Base Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(at 10% 15%, rgba(124, 58, 237, 0.12) 0px, transparent 45%),
+                radial-gradient(at 90% 85%, rgba(255, 62, 108, 0.1) 0px, transparent 45%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar customization */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(8, 10, 16, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 62, 108, 0.3);
+        }
+
+        /* Container Layout */
+        .app-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+        }
+
+        /* Header Style */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-violet));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow-coral);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+        }
+
+        .logo-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+
+        .logo-text h1 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #FFFFFF, var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        /* API Badge & Config Trigger */
+        .api-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .api-badge:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 62, 108, 0.3);
+        }
+
+        .api-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+
+        .api-status-dot.active {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 8px var(--accent-cyan);
+        }
+
+        /* API Settings Drawer */
+        .api-drawer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-bottom: 0;
+        }
+
+        .api-drawer.open {
+            max-height: 250px;
+            margin-bottom: 2rem;
+        }
+
+        .api-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .api-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .api-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .api-input-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .api-input-group input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1rem;
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
+        }
+
+        .api-input-group input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-violet));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-coral);
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #F87171;
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: #EF4444;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
+        }
+
+        .api-info-text {
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .api-info-text a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        .api-info-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* URL Input Console */
+        .console-input-section {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .console-input-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-violet), var(--accent-cyan));
+        }
+
+        .input-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .playlist-input-wrapper {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .playlist-input-wrapper input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            padding-left: 2.75rem;
+            color: white;
+            font-size: 1rem;
+            font-family: var(--font-body);
+            transition: var(--transition-smooth);
+        }
+
+        .playlist-input-wrapper input:focus {
+            outline: none;
+            border-color: var(--accent-coral);
+            box-shadow: 0 0 15px rgba(255, 62, 108, 0.15);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-analyze {
+            padding: 1rem 2rem;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+        }
+
+        .demo-link-container {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .demo-btn {
+            background: none;
+            border: none;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            font-family: var(--font-body);
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+            transition: var(--transition-smooth);
+        }
+
+        .demo-btn:hover {
+            color: #fff;
+        }
+
+        /* Loading / Fetch Status Screen */
+        .loading-section {
+            display: none;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .spinner-outer {
+            width: 70px;
+            height: 70px;
+            border: 3px solid rgba(255, 62, 108, 0.15);
+            border-top: 3px solid var(--accent-coral);
+            border-right: 3px solid var(--accent-violet);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-family: var(--font-mono);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            max-width: 400px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            margin: 1.5rem auto 0;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-cyan));
+            transition: width 0.3s ease;
+        }
+
+        /* Error Banner */
+        .error-section {
+            display: none;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2.5rem;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .error-icon {
+            color: #EF4444;
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            margin-top: 2px;
+        }
+
+        .error-content h4 {
+            color: #FCA5A5;
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .error-content p {
+            color: #FECACA;
+            font-size: 0.9rem;
+        }
+
+        /* Main Dashboard (Hidden initially) */
+        .dashboard-grid {
+            display: none;
+            grid-template-columns: 1.1fr 1.4fr;
+            gap: 2.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Column 1: Console / Controls */
+        .console-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Stats Cards */
+        .duration-card {
+            background: linear-gradient(135deg, var(--bg-surface), rgba(18, 22, 37, 0.9));
+            border: 1px solid rgba(255, 62, 108, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md), var(--glow-coral);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .duration-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255, 62, 108, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-eyebrow {
+            font-size: 0.8rem;
+            color: var(--accent-coral);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-display);
+        }
+
+        .playlist-title-display {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .duration-display-group {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .duration-hms {
+            font-family: var(--font-mono);
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            line-height: 1;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-copy-duration {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.4rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-family: var(--font-body);
+            transition: var(--transition-smooth);
+        }
+
+        .btn-copy-duration:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-color: var(--accent-coral);
+        }
+
+        .btn-copy-duration.copied {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-copy-duration svg {
+            width: 13px;
+            height: 13px;
+            fill: currentColor;
+        }
+
+        .duration-human {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .mini-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .mini-stat-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        .mini-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+
+        .mini-stat-value {
+            font-family: var(--font-mono);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Playback Speed Deck */
+        .console-panel-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .panel-card-title {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .speed-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .speed-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .speed-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(124, 58, 237, 0.4);
+        }
+
+        .speed-btn.active {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(255, 62, 108, 0.15));
+            border-color: var(--accent-violet);
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.15);
+        }
+
+        .speed-multiplier {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .speed-time {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .speed-btn.active .speed-time {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        /* Watch Schedule Simulator */
+        .simulator-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .slider-control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .slider-label {
+            color: var(--text-secondary);
+        }
+
+        .slider-value-badge {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-weight: bold;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            font-size: 0.85rem;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .custom-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.08);
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            box-shadow: var(--glow-cyan);
+            transition: transform 0.1s ease;
+        }
+
+        .custom-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .num-input-box {
+            width: 60px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 0.4rem;
+            color: white;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .num-input-box:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        .sim-results-box {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .sim-result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .sim-result-label {
+            color: var(--text-secondary);
+        }
+
+        .sim-result-value {
+            font-weight: 600;
+            color: #fff;
+            text-align: right;
+        }
+
+        .sim-result-value.highlight {
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-size: 1.15rem;
+        }
+
+        /* Column 2: Tracklist Panel */
+        .tracklist-panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            max-height: 850px;
+        }
+
+        .tracklist-header {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .tracklist-title-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tracklist-count-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 30px;
+            font-family: var(--font-mono);
+        }
+
+        /* Filter Controls */
+        .filter-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.65rem 1rem;
+            padding-left: 2.25rem;
+            color: #fff;
+            font-size: 0.85rem;
+            font-family: var(--font-body);
+            transition: var(--transition-smooth);
+        }
+
+        .search-wrapper input:focus {
+            outline: none;
+            border-color: var(--accent-violet);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 15px;
+            height: 15px;
+            pointer-events: none;
+        }
+
+        .select-sort {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.65rem 1rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            outline: none;
+            font-family: var(--font-body);
+            cursor: pointer;
+            min-width: 140px;
+            transition: var(--transition-smooth);
+        }
+
+        .select-sort:focus {
+            border-color: var(--accent-violet);
+            color: #fff;
+        }
+
+        /* Track Container Scrollable */
+        .track-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            padding-right: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .track-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.85rem;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid transparent;
+            margin-bottom: 0.75rem;
+            transition: var(--transition-smooth);
+        }
+
+        .track-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+            transform: translateX(4px);
+        }
+
+        .track-number {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .track-thumb-wrapper {
+            width: 70px;
+            height: 40px;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .track-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .track-details {
+            flex: 1;
+            min-width: 0; /* allows text truncation */
+        }
+
+        .track-title-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
+
+        .track-title-link:hover {
+            color: var(--accent-coral);
+        }
+
+        .track-badge-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.2rem;
+        }
+
+        .track-duration-badge {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.08);
+            padding: 0.05rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .track-external-icon {
+            opacity: 0;
+            transition: var(--transition-smooth);
+            color: var(--text-muted);
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .track-card:hover .track-external-icon {
+            opacity: 1;
+            color: var(--accent-coral);
+        }
+
+        /* Export Bar */
+        .export-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .export-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .export-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-export-pill {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 600;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-export-pill:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border-color: var(--accent-violet);
+        }
+
+        .btn-export-pill.copied {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #10B981;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transform: translateY(150%);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+        }
+
+        footer a {
+            color: var(--accent-coral);
+            text-decoration: none;
+        }
+
+        /* History & Landing Container Styles */
+        .landing-container {
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .landing-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .landing-title {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-search-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .history-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .history-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: var(--shadow-md), 0 0 15px rgba(0, 242, 254, 0.15);
+        }
+
+        .history-card-thumb-wrapper {
+            width: 100%;
+            height: 140px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+
+        .history-card-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .history-card:hover .history-card-thumb {
+            transform: scale(1.05);
+        }
+
+        .history-card-details {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .history-card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+            height: 2.8em;
+        }
+
+        .history-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            font-size: 0.8rem;
+        }
+
+        .history-card-count {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+        }
+
+        .history-card-duration {
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-weight: bold;
+        }
+
+        .history-card-delete-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(8, 10, 16, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #F87171;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: var(--transition-smooth);
+            opacity: 0;
+        }
+
+        .history-card:hover .history-card-delete-btn {
+            opacity: 1;
+        }
+
+        .history-card-delete-btn:hover {
+            background: #EF4444;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Side History Drawer Styles */
+        .history-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 380px;
+            max-width: 100%;
+            height: 100vh;
+            background: rgba(12, 16, 28, 0.96);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -10px 0 35px rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .history-drawer.open {
+            transform: translateX(0);
+        }
+
+        .history-drawer-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 2rem 1.5rem;
+        }
+
+        .history-drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .history-drawer-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .history-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .history-controls input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 0.5rem 0.75rem;
+            color: #fff;
+            font-size: 0.85rem;
+            outline: none;
+            font-family: var(--font-body);
+        }
+
+        .history-controls input:focus {
+            border-color: var(--accent-violet);
+        }
+
+        .btn-clear-history {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #F87171;
+            border-radius: var(--radius-sm);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: var(--font-body);
+            transition: var(--transition-smooth);
+            flex-shrink: 0;
+        }
+
+        .btn-clear-history:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #EF4444;
+            color: #fff;
+        }
+
+        .history-drawer-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding-right: 0.25rem;
+        }
+
+        .history-drawer-item {
+            display: flex;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.6rem;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            align-items: center;
+        }
+
+        .history-drawer-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(124, 58, 237, 0.4);
+            transform: translateX(-2px);
+        }
+
+        .history-drawer-item-thumb {
+            width: 76px;
+            height: 44px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #000;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .history-drawer-item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .history-drawer-item-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #fff;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
+        }
+
+        .history-drawer-item-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-top: 0.2rem;
+            color: var(--text-secondary);
+        }
+
+        .history-drawer-item-delete {
+            position: absolute;
+            top: 50%;
+            right: 0.5rem;
+            transform: translateY(-50%);
+            background: rgba(8, 10, 16, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #F87171;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: var(--transition-smooth);
+            z-index: 10;
+        }
+
+        .history-drawer-item:hover .history-drawer-item-delete {
+            opacity: 1;
+        }
+
+        .history-drawer-item-delete:hover {
+            background: #EF4444;
+            color: #fff;
+        }
+
+        /* Empty & Animate States */
+        .empty-history-box {
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 3.5rem 1.5rem;
+            text-align: center;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .empty-history-icon {
+            width: 44px;
+            height: 44px;
+            color: var(--text-muted);
+            margin: 0 auto 1.25rem;
+            stroke-width: 1.5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animated-fade-in {
+            animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- HEADER -->
+        <header>
+            <div class="logo-group">
+                <div class="logo-icon">
+                    <!-- Custom play clock icon -->
+                    <svg viewBox="0 0 24 24">
+                        <polygon points="10 8 16 12 10 16 10 8"/>
+                        <circle cx="10" cy="12" r="9" fill="none" stroke="#FFFFFF" stroke-width="2" style="opacity: 0.3;"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>VidSum</h1>
+                    <p>YouTube Playlist Duration Analyzer</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <div class="api-badge" id="history-badge-trigger" onclick="toggleHistoryDrawer(true)">
+                    <!-- History Icon (Clock with counter-clockwise arrow) -->
+                    <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; margin-right: 0.25rem;">
+                        <path d="M12 8v4l3 3"/>
+                        <circle cx="12" cy="12" r="9"/>
+                    </svg>
+                    <span>History</span>
+                </div>
+                <div class="api-badge" id="api-badge-trigger" onclick="toggleApiDrawer()">
+                    <div class="api-status-dot" id="api-status-dot"></div>
+                    <span id="api-status-text">Set API Key</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- API DRAWER -->
+        <div class="api-drawer" id="api-drawer">
+            <div class="api-card">
+                <div class="api-card-header">
+                    <h3>Configure YouTube API Key</h3>
+                    <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="toggleApiDrawer()">Close</button>
+                </div>
+                <div class="api-input-group">
+                    <input type="password" id="api-key-input" placeholder="Paste your YouTube Data API v3 Key...">
+                    <button class="btn" onclick="saveApiKey()">Save Key</button>
+                    <button class="btn btn-danger" id="btn-remove-api-key" onclick="removeApiKey()" style="display: none;">Remove Key</button>
+                </div>
+                <div class="api-info-text">
+                    Your key is stored securely in your browser's local storage.
+                    Don't have a key? Learn how to get a <a href="https://developers.google.com/youtube/v3/getting-started" target="_blank" rel="noopener">YouTube API Key</a>.
+                </div>
+            </div>
+        </div>
+
+        <!-- URL INPUT SECTION -->
+        <section class="console-input-section">
+            <h2 class="input-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-coral)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Playlist Analyzer Console
+            </h2>
+            <div class="input-row">
+                <div class="playlist-input-wrapper">
+                    <!-- Input icon -->
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    <input type="text" id="playlist-url-input" placeholder="Paste YouTube playlist URL or ID (e.g. PLBCF2DAC1B7B8D3EC)">
+                </div>
+                <button class="btn btn-analyze" id="btn-analyze" onclick="analyzePlaylist()">
+                    <span>Load Playlist</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+            </div>
+            
+            <div class="demo-link-container">
+                <span>No API Key?</span>
+                <button class="demo-btn" onclick="loadDemoPlaylist()">Load a Demo Interactive Playlist</button>
+            </div>
+        </section>
+
+        <!-- LOADING SECTION -->
+        <section class="loading-section" id="loading-section">
+            <div class="spinner-outer"></div>
+            <h3 class="loading-title">Extracting Playlist Telemetry</h3>
+            <p class="loading-subtitle" id="loading-status">Querying YouTube Data API...</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="loading-progress-bar"></div>
+            </div>
+        </section>
+
+        <!-- ERROR BANNER -->
+        <div class="error-section" id="error-section">
+            <svg class="error-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <div class="error-content">
+                <h4 id="error-title">API Connection Error</h4>
+                <p id="error-message">Could not load playlist items. Verify the URL is valid and the API Key is set correctly in settings.</p>
+            </div>
+        </div>
+
+        <!-- LANDING / HOME CONTAINER -->
+        <div id="landing-container" class="landing-container">
+            <div class="landing-header-row">
+                <h3 class="landing-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--accent-cyan);"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+                    Recent Playlists
+                </h3>
+                <div class="history-search-row">
+                    <div class="search-wrapper" style="margin-bottom: 0;">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="history-search" placeholder="Search history..." oninput="filterHistory()">
+                    </div>
+                    <button class="btn-clear-history" onclick="clearHistory()">Clear History</button>
+                </div>
+            </div>
+            
+            <div class="history-grid" id="history-grid">
+                <!-- History Cards will be loaded here -->
+            </div>
+        </div>
+
+        <!-- DASHBOARD CONTAINER -->
+        <div id="dashboard-container" class="animated-fade-in" style="display: none;">
+            <div style="margin-bottom: 1.5rem;">
+                <button class="btn btn-secondary" onclick="backToHome()" style="border-radius: var(--radius-md); padding: 0.6rem 1.2rem; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <!-- Back arrow -->
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(180deg);"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <span>Back to Home</span>
+                </button>
+            </div>
+            
+            <!-- MAIN DASHBOARD -->
+            <div class="dashboard-grid" id="dashboard-grid" style="display: grid; margin-top: 0;">
+            
+            <!-- COLUMN 1: ANALYTICS & SIMULATION -->
+            <div class="console-panel">
+                
+                <!-- Main Duration Stats Card -->
+                <div class="duration-card">
+                    <div class="card-eyebrow">Playlist Telemetry</div>
+                    <div class="playlist-title-display" id="playlist-title">Custom Development Course</div>
+                    
+                    <div class="duration-display-group">
+                        <div class="duration-hms" id="duration-display-hms">04:41:40</div>
+                        <button class="btn-copy-duration" id="btn-copy-duration" onclick="copyPlaylistDuration()">
+                            <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                            <span>Copy duration</span>
+                        </button>
+                    </div>
+                    
+                    <div class="duration-human" id="duration-display-human">4 hours, 41 minutes, 40 seconds</div>
+                    
+                    <div class="mini-stats-grid">
+                        <div class="mini-stat-item">
+                            <div class="mini-stat-label">Videos</div>
+                            <div class="mini-stat-value" id="stat-video-count">10</div>
+                        </div>
+                        <div class="mini-stat-item">
+                            <div class="mini-stat-label">Avg Length</div>
+                            <div class="mini-stat-value" id="stat-avg-duration">28m 10s</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speed Matrix Card -->
+                <div class="console-panel-card">
+                    <h3 class="panel-card-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-violet)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Playback Speed Deck
+                    </h3>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: -0.75rem; margin-bottom: 1.25rem;">Select speed to update schedule calculations below</p>
+                    <div class="speed-grid" id="speed-matrix">
+                        <div class="speed-btn active" data-speed="1.0" onclick="selectSpeed(1.0, this)">
+                            <span class="speed-multiplier">1.0×</span>
+                            <span class="speed-time" id="speed-time-1x">4h 41m 40s</span>
+                        </div>
+                        <div class="speed-btn" data-speed="1.25" onclick="selectSpeed(1.25, this)">
+                            <span class="speed-multiplier">1.25×</span>
+                            <span class="speed-time" id="speed-time-125x">3h 45m 20s</span>
+                        </div>
+                        <div class="speed-btn" data-speed="1.5" onclick="selectSpeed(1.5, this)">
+                            <span class="speed-multiplier">1.5×</span>
+                            <span class="speed-time" id="speed-time-15x">3h 7m 47s</span>
+                        </div>
+                        <div class="speed-btn" data-speed="1.75" onclick="selectSpeed(1.75, this)">
+                            <span class="speed-multiplier">1.75×</span>
+                            <span class="speed-time" id="speed-time-175x">2h 40m 57s</span>
+                        </div>
+                        <div class="speed-btn" data-speed="2.0" onclick="selectSpeed(2.0, this)">
+                            <span class="speed-multiplier">2.0×</span>
+                            <span class="speed-time" id="speed-time-2x">2h 20m 50s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Watch Schedule Simulator Card -->
+                <div class="console-panel-card">
+                    <h3 class="panel-card-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan)"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        Watch Budget Simulator
+                    </h3>
+                    <div class="simulator-inputs">
+                        <div class="slider-control-group">
+                            <div class="slider-header">
+                                <span class="slider-label">Daily Watch Budget:</span>
+                                <span class="slider-value-badge" id="slider-val-display">1.5 hours</span>
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" class="custom-slider" id="hours-slider" min="0.25" max="8" step="0.25" value="1.5" oninput="onSliderChange(this.value)">
+                                <input type="number" class="num-input-box" id="hours-num" min="0.25" max="24" step="0.25" value="1.5" oninput="onNumInputChange(this.value)">
+                            </div>
+                        </div>
+
+                        <div class="sim-results-box">
+                            <div class="sim-result-row">
+                                <span class="sim-result-label">Selected playback speed:</span>
+                                <span class="sim-result-value" id="sim-active-speed">1.00×</span>
+                            </div>
+                            <div class="sim-result-row">
+                                <span class="sim-result-label">Adjusted total duration:</span>
+                                <span class="sim-result-value" id="sim-adjusted-time">04:41:40</span>
+                            </div>
+                            <div class="sim-result-row">
+                                <span class="sim-result-label">Est. days to complete:</span>
+                                <span class="sim-result-value highlight" id="sim-days-needed">4 days</span>
+                            </div>
+                            <div class="sim-result-row">
+                                <span class="sim-result-label">Expected completion:</span>
+                                <span class="sim-result-value" id="sim-completion-date" style="color: var(--accent-cyan);">Saturday, June 14, 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- COLUMN 2: TRACK EXPLORER -->
+            <div class="tracklist-panel">
+                <div class="tracklist-header">
+                    <div class="tracklist-title-area">
+                        <h3 style="font-family: var(--font-display); font-size: 1.25rem;">Playlist Tracks</h3>
+                        <span class="tracklist-count-badge" id="tracklist-count-badge">10 videos</span>
+                    </div>
+                    
+                    <div class="filter-row">
+                        <div class="search-wrapper">
+                            <!-- Search Icon -->
+                            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="track-search-input" placeholder="Search track titles..." oninput="filterTracks()">
+                        </div>
+                        
+                        <select class="select-sort" id="track-sort" onchange="sortTracks()">
+                            <option value="default">Original Order</option>
+                            <option value="duration-desc">Longest First</option>
+                            <option value="duration-asc">Shortest First</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Scrollable Tracklist -->
+                <div class="track-container" id="track-container">
+                    <!-- Track Cards will be populated here by JS -->
+                </div>
+
+                <!-- Export Tools -->
+                <div class="export-bar">
+                    <span class="export-label">Export Playlist Data:</span>
+                    <div class="export-btns">
+                        <button class="btn-export-pill" onclick="exportData('plain')">Plain Text</button>
+                        <button class="btn-export-pill" onclick="exportData('markdown')">Markdown</button>
+                        <button class="btn-export-pill" onclick="exportData('csv')">CSV Report</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="copy-toast">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="toast-text">Data copied to clipboard!</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>VidSum Console • Open Source Standalone Tool</p>
+        <p style="margin-top: 0.25rem; font-size: 0.75rem;">Created with ❤️ and advanced agentic design principles.</p>
+    </footer>
+
+    <!-- HISTORY DRAWER (SIDEBAR) -->
+    <div class="history-drawer" id="history-drawer">
+        <div class="history-drawer-content">
+            <div class="history-drawer-header">
+                <h3>History Log</h3>
+                <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="toggleHistoryDrawer(false)">Close</button>
+            </div>
+            <div class="history-controls">
+                <input type="text" id="history-search-drawer" placeholder="Search history..." oninput="filterHistoryDrawer()">
+                <button class="btn-clear-history" onclick="clearHistory()">Clear All</button>
+            </div>
+            <div class="history-drawer-list" id="history-drawer-list">
+                <!-- History list items -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION & GLOBAL STATE
+        // ==========================================
+        
+        // Define default API Key placeholder. User can edit this string inside the HTML code.
+        const DEFAULT_API_KEY = "YOUR_YOUTUBE_API_KEY_HERE";
+        
+        let state = {
+            apiKey: '',
+            playlistTitle: '',
+            playlistId: '',
+            videos: [], // Contains: { id, title, thumbnail, duration, position }
+            filteredVideos: [],
+            activeSpeed: 1.0,
+            watchHoursPerDay: 1.5
+        };
+
+        // Real-world high-quality demo video items (Web Dev & Tech)
+        const DEMO_VIDEOS = [
+            {
+                id: "aqvtOP70O3o",
+                title: "Introduction to Web Vitals (Google Chrome Developers)",
+                thumbnail: "https://img.youtube.com/vi/aqvtOP70O3o/mqdefault.jpg",
+                duration: 298, // 4:58
+                position: 0
+            },
+            {
+                id: "vN4U5yQv1k4",
+                title: "Next-gen CSS: Houdini Layout APIs & Painting",
+                thumbnail: "https://img.youtube.com/vi/vN4U5yQv1k4/mqdefault.jpg",
+                duration: 552, // 9:12
+                position: 1
+            },
+            {
+                id: "7kVeCqQCxlk",
+                title: "Mastering CSS Grid Layout: A Deep Technical Dive",
+                thumbnail: "https://img.youtube.com/vi/7kVeCqQCxlk/mqdefault.jpg",
+                duration: 1455, // 24:15
+                position: 2
+            },
+            {
+                id: "xR2aLqMlhco",
+                title: "DevTools Tips: How to Inspect & Debug CSS Flexbox",
+                thumbnail: "https://img.youtube.com/vi/xR2aLqMlhco/mqdefault.jpg",
+                duration: 222, // 3:42
+                position: 3
+            },
+            {
+                id: "I7LskTz2xHQ",
+                title: "What is WebAssembly? Compiling C++ and Rust to Web",
+                thumbnail: "https://img.youtube.com/vi/I7LskTz2xHQ/mqdefault.jpg",
+                duration: 725, // 12:05
+                position: 4
+            },
+            {
+                id: "jVvU8RJp0Hg",
+                title: "Service Workers 101: Offline Caching & Background Sync",
+                thumbnail: "https://img.youtube.com/vi/jVvU8RJp0Hg/mqdefault.jpg",
+                duration: 930, // 15:30
+                position: 5
+            },
+            {
+                id: "eG7914R2Y2s",
+                title: "The State of Responsive Web Design in the Modern Era",
+                thumbnail: "https://img.youtube.com/vi/eG7914R2Y2s/mqdefault.jpg",
+                duration: 1102, // 18:22
+                position: 6
+            },
+            {
+                id: "uM_c_1Cq5y0",
+                title: "A Complete Guide to Console Methods Beyond console.log",
+                thumbnail: "https://img.youtube.com/vi/uM_c_1Cq5y0/mqdefault.jpg",
+                duration: 370, // 6:10
+                position: 7
+            },
+            {
+                id: "4K33w-0-p2c",
+                title: "Understanding CORS: Cross-Origin Resource Sharing Explained",
+                thumbnail: "https://img.youtube.com/vi/4K33w-0-p2c/mqdefault.jpg",
+                duration: 885, // 14:45
+                position: 8
+            },
+            {
+                id: "p2HzZkd2A40",
+                title: "Introduction to WebRTC: Live Video & Audio Peer Connections",
+                thumbnail: "https://img.youtube.com/vi/p2HzZkd2A40/mqdefault.jpg",
+                duration: 1338, // 22:18
+                position: 9
+            }
+        ];
+
+        // Initialize App on window load
+        window.addEventListener('load', () => {
+            initializeApiKey();
+            loadHistory();
+            showDashboard(false); // Make sure landing page is default on load/refresh
+
+            // Trigger Load Playlist on Enter key in url/ID input
+            const playlistInput = document.getElementById('playlist-url-input');
+            if (playlistInput) {
+                playlistInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        analyzePlaylist();
+                    }
+                });
+            }
+
+            // Trigger Save Key on Enter key in API key input
+            const apiKeyInput = document.getElementById('api-key-input');
+            if (apiKeyInput) {
+                apiKeyInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        saveApiKey();
+                    }
+                });
+            }
+        });
+
+        // ==========================================
+        // CORE INITIALIZATION & API KEY MANAGING
+        // ==========================================
+
+        function updateRemoveKeyButtonVisibility(isVisible) {
+            const btnRemove = document.getElementById('btn-remove-api-key');
+            if (btnRemove) {
+                btnRemove.style.display = isVisible ? 'inline-flex' : 'none';
+            }
+        }
+
+        function initializeApiKey() {
+            // Check if user set key in HTML code
+            if (DEFAULT_API_KEY && DEFAULT_API_KEY !== "YOUR_YOUTUBE_API_KEY_HERE" && DEFAULT_API_KEY.trim() !== "") {
+                state.apiKey = DEFAULT_API_KEY;
+                updateApiStatusBadge(true, "API Key (Hardcoded)");
+                document.getElementById('api-key-input').value = DEFAULT_API_KEY;
+                updateRemoveKeyButtonVisibility(true);
+            } else {
+                // Read from localStorage
+                const savedKey = localStorage.getItem('yt_playlist_duration_key');
+                if (savedKey) {
+                    state.apiKey = savedKey;
+                    updateApiStatusBadge(true, "API Key Active");
+                    document.getElementById('api-key-input').value = savedKey;
+                    updateRemoveKeyButtonVisibility(true);
+                } else {
+                    updateApiStatusBadge(false, "API Key Missing");
+                    updateRemoveKeyButtonVisibility(false);
+                }
+            }
+        }
+
+        function saveApiKey() {
+            const val = document.getElementById('api-key-input').value.trim();
+            if (val) {
+                localStorage.setItem('yt_playlist_duration_key', val);
+                state.apiKey = val;
+                updateApiStatusBadge(true, "API Key Active");
+                updateRemoveKeyButtonVisibility(true);
+                showToast("API Key saved successfully!");
+                toggleApiDrawer(false);
+            } else {
+                removeApiKey();
+            }
+        }
+
+        function removeApiKey() {
+            localStorage.removeItem('yt_playlist_duration_key');
+            state.apiKey = '';
+            document.getElementById('api-key-input').value = '';
+            updateApiStatusBadge(false, "API Key Missing");
+            updateRemoveKeyButtonVisibility(false);
+            showToast("API Key removed.");
+            toggleApiDrawer(false);
+        }
+
+        function updateApiStatusBadge(isActive, text) {
+            const dot = document.getElementById('api-status-dot');
+            const statusText = document.getElementById('api-status-text');
+            if (isActive) {
+                dot.classList.add('active');
+                statusText.textContent = text;
+            } else {
+                dot.classList.remove('active');
+                statusText.textContent = text;
+            }
+        }
+
+        function toggleApiDrawer(forceState) {
+            const drawer = document.getElementById('api-drawer');
+            if (forceState !== undefined) {
+                if (forceState) drawer.classList.add('open');
+                else drawer.classList.remove('open');
+            } else {
+                drawer.classList.toggle('open');
+            }
+        }
+
+        // ==========================================
+        // URL PARSING & YOUTUBE API OPERATIONS
+        // ==========================================
+
+        function parsePlaylistId(input) {
+            input = input.trim();
+            if (!input) return null;
+            
+            // Check if is 18-40 length ID directly
+            if (/^[A-Za-z0-9_-]{18,40}$/.test(input)) {
+                return input;
+            }
+            
+            try {
+                const url = new URL(input);
+                let listId = url.searchParams.get('list');
+                if (listId) return listId;
+
+                const pathSegments = url.pathname.split('/');
+                for (let i = 0; i < pathSegments.length; i++) {
+                    if (pathSegments[i] === 'playlist' && pathSegments[i+1]) {
+                        return pathSegments[i+1];
+                    }
+                }
+            } catch (e) {
+                // Attempt regex match if not a fully qualified URL
+                const match = input.match(/[?&]list=([^#\&\?]+)/);
+                if (match && match[1]) {
+                    return match[1];
+                }
+            }
+            
+            return null;
+        }
+
+        // ISO 8601 Durations to Seconds Converter (PT1H2M10S -> 3730)
+        function parseISO8601Duration(durationStr) {
+            if (!durationStr) return 0;
+            const regex = /P(?:([0-9]+)D)?T(?:([0-9]+)H)?(?:([0-9]+)M)?(?:([0-9]+)S)?/;
+            const matches = durationStr.match(regex);
+            if (!matches) return 0;
+            
+            const days = parseInt(matches[1] || 0, 10);
+            const hours = parseInt(matches[2] || 0, 10);
+            const minutes = parseInt(matches[3] || 0, 10);
+            const seconds = parseInt(matches[4] || 0, 10);
+            
+            return (days * 86400) + (hours * 3600) + (minutes * 60) + seconds;
+        }
+
+        async function fetchPlaylistItems(playlistId, apiKey) {
+            let allItems = [];
+            let nextPageToken = '';
+            let hasNextPage = true;
+            let playlistTitle = "YouTube Playlist";
+            let playlistThumbnail = "";
+            
+            // Step 1: Try fetching the Playlist general info
+            try {
+                const plistUrl = `https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=${playlistId}&key=${apiKey}`;
+                const plistRes = await fetch(plistUrl);
+                if (plistRes.ok) {
+                    const plistData = await plistRes.json();
+                    if (plistData.items && plistData.items.length > 0) {
+                        const snippet = plistData.items[0].snippet;
+                        playlistTitle = snippet.title;
+                        playlistThumbnail = snippet.thumbnails?.medium?.url || snippet.thumbnails?.default?.url || snippet.thumbnails?.high?.url || "";
+                    }
+                }
+            } catch (e) {
+                console.warn("Could not retrieve playlist snippet, using default name.");
+            }
+
+            // Step 2: Retrieve all items page-by-page (50 per batch)
+            while (hasNextPage) {
+                updateLoadingStatus(`Fetching track metadata (Retrieved ${allItems.length} so far)...`, 30);
+                const listUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${playlistId}&maxResults=50&pageToken=${nextPageToken}&key=${apiKey}`;
+                
+                const response = await fetch(listUrl);
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error?.message || "YouTube API error occurred");
+                }
+                
+                const data = await response.json();
+                if (!data.items || data.items.length === 0) {
+                    break;
+                }
+                
+                // Keep relevant fields
+                const pageItems = data.items.map(item => ({
+                    id: item.contentDetails.videoId,
+                    title: item.snippet.title,
+                    thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || 'https://via.placeholder.com/320x180?text=No+Thumbnail',
+                    position: item.snippet.position || 0,
+                    duration: 0 // Will populate in the next API step
+                }));
+                
+                allItems = allItems.concat(pageItems);
+                nextPageToken = data.nextPageToken || '';
+                hasNextPage = !!nextPageToken;
+            }
+
+            if (allItems.length === 0) {
+                throw new Error("This playlist contains no videos or is private.");
+            }
+
+            // Step 3: Fetch exact durations for all videos in batches of 50
+            const batchSize = 50;
+            for (let i = 0; i < allItems.length; i += batchSize) {
+                const batch = allItems.slice(i, i + batchSize);
+                const ids = batch.map(b => b.id).join(',');
+                const progressPct = 30 + Math.floor((i / allItems.length) * 70);
+                
+                updateLoadingStatus(`Fetching video durations... batch ${Math.floor(i/50) + 1} of ${Math.ceil(allItems.length/50)}`, progressPct);
+                
+                const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${ids}&key=${apiKey}`;
+                const videoResponse = await fetch(videoUrl);
+                if (!videoResponse.ok) {
+                    const errData = await videoResponse.json();
+                    throw new Error(errData.error?.message || "Failed to retrieve durations.");
+                }
+                
+                const videoData = await videoResponse.json();
+                const durationMap = {};
+                if (videoData.items) {
+                    videoData.items.forEach(v => {
+                        durationMap[v.id] = parseISO8601Duration(v.contentDetails.duration);
+                    });
+                }
+                
+                // Map the results back to the items array
+                batch.forEach(b => {
+                    b.duration = durationMap[b.id] || 0;
+                });
+            }
+
+            return {
+                title: playlistTitle,
+                thumbnail: playlistThumbnail,
+                videos: allItems
+            };
+        }
+
+        // ==========================================
+        // EVENT HANDLERS & SIMULATOR LOGIC
+        // ==========================================
+
+        async function analyzePlaylist() {
+            const input = document.getElementById('playlist-url-input').value.trim();
+            const errorSection = document.getElementById('error-section');
+            const loadingSection = document.getElementById('loading-section');
+            const dashboardGrid = document.getElementById('dashboard-grid');
+
+            // Reset UI states
+            errorSection.style.display = 'none';
+            dashboardGrid.style.display = 'none';
+            
+            const playlistId = parsePlaylistId(input);
+            if (!playlistId) {
+                showError("Invalid Input Format", "Please check your playlist URL or ID. It must be a valid YouTube playlist link or alphanumeric playlist ID.");
+                return;
+            }
+
+            if (!state.apiKey) {
+                showError("YouTube API Key Required", "To fetch live YouTube data, you must provide an API Key. Click 'Set API Key' in the header to enter one, or select 'Load a Demo Interactive Playlist' below to test the app features.");
+                toggleApiDrawer(true);
+                return;
+            }
+
+            state.playlistId = playlistId;
+            loadingSection.style.display = 'block';
+            updateLoadingStatus("Connecting to YouTube APIs...", 10);
+
+            try {
+                const result = await fetchPlaylistItems(playlistId, state.apiKey);
+                
+                state.playlistTitle = result.title;
+                state.videos = result.videos;
+                state.filteredVideos = [...result.videos];
+                
+                // Add to history
+                const totalSeconds = result.videos.reduce((sum, v) => sum + v.duration, 0);
+                const thumb = result.thumbnail || (result.videos[0]?.thumbnail || '');
+                const playlistUrl = input.startsWith('http') ? input : `https://www.youtube.com/playlist?list=${playlistId}`;
+                addToHistory(playlistId, result.title, thumb, totalSeconds, result.videos.length, playlistUrl);
+
+                buildDashboard();
+                
+                loadingSection.style.display = 'none';
+                showDashboard(true);
+                showToast("Playlist loaded successfully!");
+            } catch (err) {
+                loadingSection.style.display = 'none';
+                showError("API Execution Error", err.message || "An unexpected error occurred while communicating with YouTube servers.");
+            }
+        }
+
+        function loadDemoPlaylist() {
+            // Load pre-configured mock playlist data
+            state.playlistTitle = "Google I/O Web Development Workshop (Demo)";
+            state.playlistId = "PLBCF2DAC1B7B8D3EC"; // Mock ID
+            state.videos = [...DEMO_VIDEOS];
+            state.filteredVideos = [...DEMO_VIDEOS];
+
+            document.getElementById('playlist-url-input').value = "https://www.youtube.com/playlist?list=PLBCF2DAC1B7B8D3EC";
+            document.getElementById('error-section').style.display = 'none';
+            document.getElementById('loading-section').style.display = 'none';
+
+            // Add demo to history!
+            const totalSeconds = DEMO_VIDEOS.reduce((sum, v) => sum + v.duration, 0);
+            addToHistory("DEMO_PLAYLIST_ID", state.playlistTitle, DEMO_VIDEOS[0].thumbnail, totalSeconds, DEMO_VIDEOS.length, "https://www.youtube.com/playlist?list=PLBCF2DAC1B7B8D3EC");
+
+            buildDashboard();
+            showDashboard(true);
+            showToast("Loaded interactive demo playlist.");
+        }
+
+        // ==========================================
+        // SIDEBAR HISTORY DRAWER TOGGLE
+        // ==========================================
+        function toggleHistoryDrawer(forceState) {
+            const drawer = document.getElementById('history-drawer');
+            if (forceState !== undefined) {
+                if (forceState) drawer.classList.add('open');
+                else drawer.classList.remove('open');
+            } else {
+                drawer.classList.toggle('open');
+            }
+        }
+
+        // ==========================================
+        // DASHBOARD VISIBILITY TOGGLE
+        // ==========================================
+        function showDashboard(visible) {
+            const landing = document.getElementById('landing-container');
+            const dashboard = document.getElementById('dashboard-container');
+            const dashboardGrid = document.getElementById('dashboard-grid');
+            const errorSection = document.getElementById('error-section');
+            
+            if (visible) {
+                landing.style.display = 'none';
+                dashboard.style.display = 'block';
+                if (dashboardGrid) {
+                    dashboardGrid.style.display = 'grid';
+                }
+                errorSection.style.display = 'none';
+            } else {
+                landing.style.display = 'block';
+                dashboard.style.display = 'none';
+                document.getElementById('playlist-url-input').value = '';
+            }
+        }
+
+        function backToHome() {
+            showDashboard(false);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==========================================
+        // HISTORY STATE & PERSISTENCE
+        // ==========================================
+        function loadHistory() {
+            renderHistory();
+        }
+
+        function addToHistory(id, title, thumbnail, totalSeconds, videoCount, url) {
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
+            } catch (e) {
+                history = [];
+            }
+            
+            // Remove duplicates
+            history = history.filter(item => item.id !== id);
+            
+            // Construct entry
+            const newEntry = {
+                id: id,
+                title: title,
+                thumbnail: thumbnail || (state.videos[0]?.thumbnail || 'https://via.placeholder.com/320x180?text=No+Thumbnail'),
+                totalDuration: totalSeconds,
+                videoCount: videoCount,
+                url: url,
+                timestamp: Date.now()
+            };
+            
+            history.unshift(newEntry);
+            
+            // Limit to 50
+            if (history.length > 50) {
+                history = history.slice(0, 50);
+            }
+            
+            localStorage.setItem('vidsum_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function deleteHistoryItem(id, event) {
+            if (event) event.stopPropagation();
+            
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
+            } catch (e) {
+                history = [];
+            }
+            
+            history = history.filter(item => item.id !== id);
+            localStorage.setItem('vidsum_history', JSON.stringify(history));
+            renderHistory();
+            showToast("Item deleted from history.");
+        }
+
+        function clearHistory() {
+            if (confirm("Are you sure you want to clear all history?")) {
+                localStorage.removeItem('vidsum_history');
+                renderHistory();
+                showToast("History cleared.");
+            }
+        }
+
+        function renderHistory() {
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
+            } catch (e) {
+                history = [];
+            }
+            
+            const hs = document.getElementById('history-search');
+            const hsd = document.getElementById('history-search-drawer');
+            if (hs) hs.value = '';
+            if (hsd) hsd.value = '';
+            
+            drawHistoryGrid(history);
+            drawHistoryDrawerList(history);
+        }
+
+        function drawHistoryGrid(history) {
+            const landingGrid = document.getElementById('history-grid');
+            if (!landingGrid) return;
+            
+            if (history.length === 0) {
+                landingGrid.innerHTML = `
+                    <div class="empty-history-box" style="grid-column: 1 / -1;">
+                        <svg class="empty-history-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <p style="font-weight: 600; margin-bottom: 0.25rem;">No recent playlists</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">Playlists you analyze will appear here for quick access.</p>
+                    </div>
+                `;
+            } else {
+                landingGrid.innerHTML = '';
+                history.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'history-card';
+                    card.onclick = (e) => {
+                        if (e.target.closest('.history-card-delete-btn')) return;
+                        reopenPlaylist(item);
+                    };
+                    
+                    const formattedDate = new Date(item.timestamp).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    card.innerHTML = `
+                        <button class="history-card-delete-btn" title="Delete from history" onclick="deleteHistoryItem('${item.id}', event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                        <div class="history-card-thumb-wrapper">
+                            <img class="history-card-thumb" src="${item.thumbnail}" alt="${item.title}" loading="lazy">
+                        </div>
+                        <div class="history-card-details">
+                            <div class="history-card-title" title="${item.title}">${item.title}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Analyzed: ${formattedDate}</div>
+                            <div class="history-card-meta">
+                                <span class="history-card-count">${item.videoCount} videos</span>
+                                <span class="history-card-duration">${formatSecondsShort(item.totalDuration)}</span>
+                            </div>
+                        </div>
+                    `;
+                    landingGrid.appendChild(card);
+                });
+            }
+        }
+
+        function drawHistoryDrawerList(history) {
+            const drawerList = document.getElementById('history-drawer-list');
+            if (!drawerList) return;
+            
+            if (history.length === 0) {
+                drawerList.innerHTML = `
+                    <div style="text-align: center; color: var(--text-muted); padding: 3rem 1rem; font-size: 0.85rem;">
+                        No history items found.
+                    </div>
+                `;
+            } else {
+                drawerList.innerHTML = '';
+                history.forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'history-drawer-item';
+                    itemEl.onclick = (e) => {
+                        if (e.target.closest('.history-drawer-item-delete')) return;
+                        reopenPlaylist(item);
+                        toggleHistoryDrawer(false);
+                    };
+                    
+                    itemEl.innerHTML = `
+                        <button class="history-drawer-item-delete" title="Delete" onclick="deleteHistoryItem('${item.id}', event)">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                        <img class="history-drawer-item-thumb" src="${item.thumbnail}" alt="${item.title}">
+                        <div class="history-drawer-item-details">
+                            <div class="history-drawer-item-title" title="${item.title}">${item.title}</div>
+                            <div class="history-drawer-item-meta">
+                                <span>${item.videoCount} videos</span>
+                                <span style="color: var(--accent-cyan);">${formatSecondsShort(item.totalDuration)}</span>
+                            </div>
+                        </div>
+                    `;
+                    drawerList.appendChild(itemEl);
+                });
+            }
+        }
+
+        function filterHistory() {
+            const query = document.getElementById('history-search').value.toLowerCase().trim();
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
+            } catch (e) {
+                history = [];
+            }
+            const filtered = history.filter(item => item.title.toLowerCase().includes(query));
+            drawHistoryGrid(filtered);
+        }
+
+        function filterHistoryDrawer() {
+            const query = document.getElementById('history-search-drawer').value.toLowerCase().trim();
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
+            } catch (e) {
+                history = [];
+            }
+            const filtered = history.filter(item => item.title.toLowerCase().includes(query));
+            drawHistoryDrawerList(filtered);
+        }
+
+        function reopenPlaylist(item) {
+            document.getElementById('playlist-url-input').value = item.url;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (item.id === "DEMO_PLAYLIST_ID") {
+                loadDemoPlaylist();
+            } else {
+                analyzePlaylist();
+            }
+        }
+
+        // ==========================================
+        // UI DRAWING & CALCULATIONS
+        // ==========================================
+
+        function buildDashboard() {
+            // 1. Title
+            document.getElementById('playlist-title').textContent = state.playlistTitle;
+
+            // 2. Sum durations
+            const totalSeconds = state.videos.reduce((sum, v) => sum + v.duration, 0);
+            
+            // Update summary statistics cards
+            document.getElementById('duration-display-hms').textContent = formatSecondsToHMS(totalSeconds);
+            document.getElementById('duration-display-human').textContent = formatSecondsToHuman(totalSeconds);
+            document.getElementById('stat-video-count').textContent = state.videos.length;
+            
+            const avgSeconds = state.videos.length > 0 ? Math.round(totalSeconds / state.videos.length) : 0;
+            document.getElementById('stat-avg-duration').textContent = formatSecondsShort(avgSeconds);
+
+            // 3. Update Speeds matrix times
+            document.getElementById('speed-time-1x').textContent = formatSecondsToDhms(totalSeconds);
+            document.getElementById('speed-time-125x').textContent = formatSecondsToDhms(totalSeconds / 1.25);
+            document.getElementById('speed-time-15x').textContent = formatSecondsToDhms(totalSeconds / 1.5);
+            document.getElementById('speed-time-175x').textContent = formatSecondsToDhms(totalSeconds / 1.75);
+            document.getElementById('speed-time-2x').textContent = formatSecondsToDhms(totalSeconds / 2.0);
+
+            // 4. Reset Speed selection to 1x
+            const speedBtns = document.querySelectorAll('.speed-btn');
+            speedBtns.forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.speed-btn[data-speed="1.0"]').classList.add('active');
+            state.activeSpeed = 1.0;
+
+            // 5. Build Tracks List
+            filterAndDrawTracks();
+
+            // 6. Run completion simulations
+            runSimulations();
+        }
+
+        function filterAndDrawTracks() {
+            const container = document.getElementById('track-container');
+            container.innerHTML = '';
+            
+            if (state.filteredVideos.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; color: var(--text-muted); padding: 3rem 1rem;">
+                        No videos match your filter criteria.
+                    </div>
+                `;
+                document.getElementById('tracklist-count-badge').textContent = `0 videos`;
+                return;
+            }
+
+            document.getElementById('tracklist-count-badge').textContent = `${state.filteredVideos.length} video${state.filteredVideos.length !== 1 ? 's' : ''}`;
+
+            state.filteredVideos.forEach((vid, idx) => {
+                const card = document.createElement('div');
+                card.className = 'track-card';
+                
+                // Construct playlist item direct watch link
+                const watchUrl = state.playlistId 
+                    ? `https://www.youtube.com/watch?v=${vid.id}&list=${state.playlistId}&index=${vid.position + 1}`
+                    : `https://youtu.be/${vid.id}`;
+                
+                card.innerHTML = `
+                    <div class="track-number">${vid.position + 1}</div>
+                    <div class="track-thumb-wrapper">
+                        <img class="track-thumb" src="${vid.thumbnail}" alt="${vid.title}" loading="lazy">
+                    </div>
+                    <div class="track-details">
+                        <a class="track-title-link" href="${watchUrl}" target="_blank" rel="noopener" title="${vid.title}">
+                            ${vid.title}
+                        </a>
+                        <div class="track-badge-group">
+                            <span class="track-duration-badge">${formatSecondsShort(vid.duration)}</span>
+                        </div>
+                    </div>
+                    <!-- External Link Arrow -->
+                    <svg class="track-external-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterTracks() {
+            const query = document.getElementById('track-search-input').value.toLowerCase().trim();
+            if (!query) {
+                state.filteredVideos = [...state.videos];
+            } else {
+                state.filteredVideos = state.videos.filter(v => v.title.toLowerCase().includes(query));
+            }
+            sortTracks(); // keep sorting when filtering
+        }
+
+        function sortTracks() {
+            const sortVal = document.getElementById('track-sort').value;
+            if (sortVal === 'duration-desc') {
+                state.filteredVideos.sort((a, b) => b.duration - a.duration);
+            } else if (sortVal === 'duration-asc') {
+                state.filteredVideos.sort((a, b) => a.duration - b.duration);
+            } else {
+                // Original Index Order
+                state.filteredVideos.sort((a, b) => a.position - b.position);
+            }
+            filterAndDrawTracks();
+        }
+
+        function selectSpeed(speed, element) {
+            state.activeSpeed = speed;
+            
+            // Manage UI class
+            const speedBtns = document.querySelectorAll('.speed-btn');
+            speedBtns.forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            // Update Simulation displays
+            runSimulations();
+        }
+
+        function onSliderChange(val) {
+            state.watchHoursPerDay = parseFloat(val);
+            document.getElementById('slider-val-display').textContent = `${val} hour${val != 1 ? 's' : ''}`;
+            document.getElementById('hours-num').value = val;
+            runSimulations();
+        }
+
+        function onNumInputChange(val) {
+            let parsedVal = parseFloat(val);
+            if (isNaN(parsedVal) || parsedVal <= 0) {
+                return;
+            }
+            if (parsedVal > 24) {
+                parsedVal = 24;
+                document.getElementById('hours-num').value = 24;
+            }
+            state.watchHoursPerDay = parsedVal;
+            document.getElementById('slider-val-display').textContent = `${parsedVal} hour${parsedVal != 1 ? 's' : ''}`;
+            
+            // sync slider if in range
+            if (parsedVal <= 8) {
+                document.getElementById('hours-slider').value = parsedVal;
+            }
+            runSimulations();
+        }
+
+        function runSimulations() {
+            const totalOriginalSeconds = state.videos.reduce((sum, v) => sum + v.duration, 0);
+            const adjustedSeconds = totalOriginalSeconds / state.activeSpeed;
+
+            // Display speed multiplier in planner results box
+            document.getElementById('sim-active-speed').textContent = `${state.activeSpeed.toFixed(2)}×`;
+            document.getElementById('sim-adjusted-time').textContent = formatSecondsToHMS(adjustedSeconds);
+
+            // Date math
+            const hoursPerDay = state.watchHoursPerDay;
+            if (hoursPerDay <= 0) {
+                document.getElementById('sim-days-needed').textContent = "Never";
+                document.getElementById('sim-completion-date').textContent = "Watch hours must be greater than zero.";
+                return;
+            }
+
+            const secondsPerDay = hoursPerDay * 3600;
+            const daysNeededFloat = adjustedSeconds / secondsPerDay;
+            const daysNeededCeil = Math.ceil(daysNeededFloat);
+
+            // Display days text
+            document.getElementById('sim-days-needed').textContent = `${daysNeededCeil} day${daysNeededCeil !== 1 ? 's' : ''}`;
+
+            // Calculate target completion date
+            const today = new Date();
+            const msInDay = 24 * 60 * 60 * 1000;
+            const targetDate = new Date(today.getTime() + (daysNeededFloat * msInDay));
+            
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('sim-completion-date').textContent = targetDate.toLocaleDateString(undefined, dateOptions);
+        }
+
+        // ==========================================
+        // EXPORT AND CLIPBOARD UTILITIES
+        // ==========================================
+
+        async function copyPlaylistDuration() {
+            const totalOriginalSeconds = state.videos.reduce((sum, v) => sum + v.duration, 0);
+            const hmsText = formatSecondsToHMS(totalOriginalSeconds);
+            const button = document.getElementById('btn-copy-duration');
+            
+            try {
+                await navigator.clipboard.writeText(hmsText);
+                button.classList.add('copied');
+                const origText = button.querySelector('span').textContent;
+                button.querySelector('span').textContent = 'Copied!';
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.querySelector('span').textContent = origText;
+                }, 2000);
+                showToast("Duration string copied: " + hmsText);
+            } catch (err) {
+                console.error("Clipboard copy failed", err);
+            }
+        }
+
+        function exportData(format) {
+            if (state.videos.length === 0) {
+                showToast("No data available to export.", true);
+                return;
+            }
+
+            let textContent = '';
+            
+            if (format === 'plain') {
+                textContent = `Playlist: ${state.playlistTitle}\n`;
+                textContent += `Total Videos: ${state.videos.length}\n`;
+                textContent += `Total Duration: ${formatSecondsToHMS(state.videos.reduce((s, v) => s + v.duration, 0))}\n\n`;
+                state.videos.forEach((v, i) => {
+                    const url = `https://youtu.be/${v.id}`;
+                    textContent += `${i + 1}. ${v.title} (${formatSecondsShort(v.duration)}) - ${url}\n`;
+                });
+            } else if (format === 'markdown') {
+                textContent = `# ${state.playlistTitle}\n\n`;
+                textContent += `- **Total Videos:** ${state.videos.length}\n`;
+                textContent += `- **Total Duration:** ${formatSecondsToHMS(state.videos.reduce((s, v) => s + v.duration, 0))}\n\n`;
+                textContent += `| # | Title | Duration | Link |\n`;
+                textContent += `|---|-------|----------|------|\n`;
+                state.videos.forEach((v, i) => {
+                    const url = `https://youtu.be/${v.id}`;
+                    textContent += `| ${i + 1} | [${v.title}](${url}) | ${formatSecondsShort(v.duration)} | [Watch](${url}) |\n`;
+                });
+            } else if (format === 'csv') {
+                textContent = `"Index","Video Title","Duration Seconds","Duration Text","Video URL"\n`;
+                state.videos.forEach((v, i) => {
+                    const url = `https://youtu.be/${v.id}`;
+                    // escape double quotes in titles
+                    const cleanTitle = v.title.replace(/"/g, '""');
+                    textContent += `"${i + 1}","${cleanTitle}","${v.duration}","${formatSecondsShort(v.duration)}","${url}"\n`;
+                });
+            }
+
+            copyStringToClipboard(textContent, `Exported ${format.toUpperCase()} to clipboard!`);
+        }
+
+        async function copyStringToClipboard(str, successMessage) {
+            try {
+                await navigator.clipboard.writeText(str);
+                showToast(successMessage);
+            } catch (err) {
+                console.error("Failed to copy", err);
+                showToast("Clipboard write permission blocked.", true);
+            }
+        }
+
+        // ==========================================
+        // FORMATTER HELPER FUNCTIONS
+        // ==========================================
+
+        function formatSecondsToHMS(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            
+            const pad = (num) => String(num).padStart(2, '0');
+            return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+
+        function formatSecondsToDhms(totalSeconds) {
+            totalSeconds = Math.round(totalSeconds);
+            const days = Math.floor(totalSeconds / 86400);
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            
+            const parts = [];
+            if (days > 0) parts.push(`${days}d`);
+            if (hours > 0 || days > 0) parts.push(`${hours}h`);
+            if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes}m`);
+            parts.push(`${seconds}s`);
+            
+            return parts.join(' ');
+        }
+
+        function formatSecondsToHuman(totalSeconds) {
+            const days = Math.floor(totalSeconds / 86400);
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            
+            const parts = [];
+            if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+            if (hours > 0) parts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+            if (minutes > 0) parts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`);
+            if (seconds > 0 || parts.length === 0) parts.push(`${seconds} second${seconds > 1 ? 's' : ''}`);
+            
+            return parts.join(', ');
+        }
+
+        function formatSecondsShort(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            
+            if (hours > 0) {
+                return `${hours}h ${minutes}m`;
+            }
+            if (minutes > 0) {
+                return `${minutes}m ${seconds}s`;
+            }
+            return `${seconds}s`;
+        }
+
+        // ==========================================
+        // UI HELPERS (TOAST, ERROR, STATUS)
+        // ==========================================
+
+        function updateLoadingStatus(text, pct) {
+            document.getElementById('loading-status').textContent = text;
+            document.getElementById('loading-progress-bar').style.width = `${pct}%`;
+        }
+
+        function showToast(text, isError = false) {
+            const toast = document.getElementById('copy-toast');
+            const toastText = document.getElementById('toast-text');
+            
+            toastText.textContent = text;
+            if (isError) {
+                toast.style.background = "#EF4444";
+            } else {
+                toast.style.background = "#10B981";
+            }
+            
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function showError(title, message) {
+            const section = document.getElementById('error-section');
+            document.getElementById('error-title').textContent = title;
+            document.getElementById('error-message').textContent = message;
+            section.style.display = 'flex';
+            
+            // Auto scroll to error
+            section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
