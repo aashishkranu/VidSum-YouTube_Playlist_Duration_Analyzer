@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VidSum</title>
     
+    <script>
+        // Inline script to prevent theme flash
+        (function() {
+            const savedTheme = localStorage.getItem('vidsum_theme');
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
+            }
+        })();
+    </script>
+    
     <!-- Google Fonts for premium typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,6 +57,135 @@
             --glow-cyan: 0 0 25px rgba(0, 242, 254, 0.25);
             
             --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+            /* Theme specific styles system variables */
+            --input-bg: rgba(0, 0, 0, 0.3);
+            --input-text: #ffffff;
+            --input-focus-border: var(--accent-coral);
+            
+            --btn-secondary-bg: rgba(255, 255, 255, 0.06);
+            --btn-secondary-hover-bg: rgba(255, 255, 255, 0.1);
+            
+            --api-badge-bg: rgba(255, 255, 255, 0.04);
+            --api-badge-hover-bg: rgba(255, 255, 255, 0.08);
+
+            --progress-bar-track: rgba(255, 255, 255, 0.05);
+
+            --duration-card-bg-end: rgba(18, 22, 37, 0.9);
+            --duration-hms-color: #ffffff;
+            --duration-hms-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+
+            --copy-btn-bg: rgba(255, 255, 255, 0.05);
+            --copy-btn-border: rgba(255, 255, 255, 0.1);
+
+            --mini-stat-bg: rgba(0, 0, 0, 0.2);
+
+            --speed-btn-bg: rgba(255, 255, 255, 0.03);
+            --speed-btn-hover-bg: rgba(255, 255, 255, 0.06);
+
+            --slider-track-bg: rgba(255, 255, 255, 0.08);
+
+            --sim-results-bg: rgba(0, 0, 0, 0.25);
+
+            --track-card-bg: rgba(255, 255, 255, 0.01);
+            --card-hover-bg: rgba(255, 255, 255, 0.04);
+            --card-hover-border: rgba(255, 255, 255, 0.06);
+            --thumb-border: rgba(255, 255, 255, 0.05);
+
+            --export-btn-bg: rgba(255, 255, 255, 0.03);
+            --export-btn-hover-bg: rgba(255, 255, 255, 0.08);
+
+            --delete-btn-bg: rgba(8, 10, 16, 0.85);
+
+            --history-drawer-bg: rgba(12, 16, 28, 0.96);
+            --history-drawer-item-bg: rgba(255, 255, 255, 0.02);
+
+            --empty-history-bg: rgba(255, 255, 255, 0.01);
+            --empty-history-border: rgba(255, 255, 255, 0.1);
+
+            --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+            --scrollbar-track: rgba(8, 10, 16, 0.5);
+
+            --gradient-logo: linear-gradient(135deg, var(--accent-coral), var(--accent-violet));
+            --logo-text-gradient: linear-gradient(to right, #FFFFFF, var(--text-secondary));
+            
+            --body-bg-gradient: radial-gradient(at 10% 15%, rgba(124, 58, 237, 0.12) 0px, transparent 45%), radial-gradient(at 90% 85%, rgba(255, 62, 108, 0.1) 0px, transparent 45%);
+        }
+
+        /* Light Theme variables overrides */
+        html[data-theme="light"] {
+            --bg-deep: #F1F5F9; /* Slate 100 */
+            --bg-surface: rgba(255, 255, 255, 0.85);
+            --bg-surface-elevated: rgba(255, 255, 255, 0.98);
+            --border-color: rgba(15, 23, 42, 0.12); /* Slate 900 low opacity */
+            --border-glow: rgba(225, 29, 72, 0.12); /* Light pink glow */
+            
+            --accent-coral: #E11D48; /* rose-600 */
+            --accent-coral-rgb: 225, 29, 72;
+            --accent-violet: #6D28D9; /* violet-700 */
+            --accent-violet-rgb: 109, 40, 217;
+            --accent-cyan: #0E7490; /* cyan-700 (High Contrast) */
+            --accent-cyan-rgb: 14, 116, 144;
+            
+            --text-primary: #0F172A; /* Slate 900 */
+            --text-secondary: #334155; /* Slate 700 */
+            --text-muted: #475569; /* Slate 600 */
+            
+            --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 12px 36px rgba(15, 23, 42, 0.08);
+            --glow-coral: 0 0 25px rgba(225, 29, 72, 0.12);
+            --glow-cyan: 0 0 25px rgba(8, 145, 178, 0.12);
+
+            --input-bg: rgba(255, 255, 255, 0.85);
+            --input-text: #0F172A;
+            --input-focus-border: var(--accent-violet);
+            
+            --btn-secondary-bg: rgba(15, 23, 42, 0.05);
+            --btn-secondary-hover-bg: rgba(15, 23, 42, 0.1);
+            
+            --api-badge-bg: rgba(15, 23, 42, 0.04);
+            --api-badge-hover-bg: rgba(15, 23, 42, 0.08);
+
+            --progress-bar-track: rgba(15, 23, 42, 0.05);
+
+            --duration-card-bg-end: rgba(255, 255, 255, 0.95);
+            --duration-hms-color: #0F172A;
+            --duration-hms-shadow: none;
+
+            --copy-btn-bg: rgba(15, 23, 42, 0.04);
+            --copy-btn-border: rgba(15, 23, 42, 0.08);
+
+            --mini-stat-bg: rgba(15, 23, 42, 0.03);
+
+            --speed-btn-bg: rgba(15, 23, 42, 0.02);
+            --speed-btn-hover-bg: rgba(15, 23, 42, 0.05);
+
+            --slider-track-bg: rgba(15, 23, 42, 0.08);
+
+            --sim-results-bg: rgba(15, 23, 42, 0.03);
+
+            --track-card-bg: rgba(15, 23, 42, 0.01);
+            --card-hover-bg: rgba(15, 23, 42, 0.03);
+            --card-hover-border: rgba(15, 23, 42, 0.06);
+            --thumb-border: rgba(15, 23, 42, 0.06);
+
+            --export-btn-bg: rgba(15, 23, 42, 0.03);
+            --export-btn-hover-bg: rgba(15, 23, 42, 0.06);
+
+            --delete-btn-bg: rgba(255, 255, 255, 0.9);
+
+            --history-drawer-bg: rgba(255, 255, 255, 0.96);
+            --history-drawer-item-bg: rgba(15, 23, 42, 0.02);
+
+            --empty-history-bg: rgba(15, 23, 42, 0.01);
+            --empty-history-border: rgba(15, 23, 42, 0.1);
+
+            --scrollbar-thumb: rgba(15, 23, 42, 0.15);
+            --scrollbar-track: rgba(241, 245, 249, 0.5);
+
+            --logo-text-gradient: linear-gradient(to right, #0F172A, var(--text-secondary));
+            
+            --body-bg-gradient: radial-gradient(at 10% 15%, rgba(109, 40, 217, 0.06) 0px, transparent 45%), radial-gradient(at 90% 85%, rgba(225, 29, 72, 0.05) 0px, transparent 45%);
         }
 
         /* Base Reset */
@@ -55,9 +197,7 @@
 
         body {
             background-color: var(--bg-deep);
-            background-image: 
-                radial-gradient(at 10% 15%, rgba(124, 58, 237, 0.12) 0px, transparent 45%),
-                radial-gradient(at 90% 85%, rgba(255, 62, 108, 0.1) 0px, transparent 45%);
+            background-image: var(--body-bg-gradient);
             background-attachment: fixed;
             color: var(--text-primary);
             font-family: var(--font-body);
@@ -67,20 +207,87 @@
             overflow-x: hidden;
         }
 
+        /* Theme Toggle styles */
+        #theme-toggle {
+            position: relative;
+            user-select: none;
+        }
+        
+        html[data-theme="dark"] .theme-icon-moon {
+            display: inline-block !important;
+        }
+        html[data-theme="dark"] .theme-icon-sun {
+            display: none !important;
+        }
+        html[data-theme="light"] .theme-icon-sun {
+            display: inline-block !important;
+        }
+        html[data-theme="light"] .theme-icon-moon {
+            display: none !important;
+        }
+
+        /* Specific overrides for buttons and inputs in Light Mode to meet accessibility standards */
+        html[data-theme="light"] .select-sort option {
+            background: var(--bg-surface-elevated);
+            color: var(--text-primary);
+        }
+
+        html[data-theme="light"] .btn-danger {
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            color: #DC2626;
+        }
+
+        html[data-theme="light"] .btn-danger:hover {
+            background: rgba(220, 38, 38, 0.15);
+            border-color: #DC2626;
+            color: #fff;
+        }
+
+        html[data-theme="light"] .error-section {
+            background: rgba(220, 38, 38, 0.06);
+            border-color: rgba(220, 38, 38, 0.25);
+        }
+
+        html[data-theme="light"] .error-content h4 {
+            color: #B91C1C;
+        }
+
+        html[data-theme="light"] .error-content p {
+            color: #7F1D1D;
+        }
+
+        /* Theme transitions */
+        body, 
+        .api-card, 
+        .console-input-section, 
+        .loading-section, 
+        .error-section, 
+        .duration-card, 
+        .console-panel-card, 
+        .tracklist-panel, 
+        .track-card, 
+        .history-card, 
+        .history-drawer,
+        .history-drawer-content,
+        .history-drawer-item {
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+        }
+
         /* Scrollbar customization */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(8, 10, 16, 0.5);
+            background: var(--scrollbar-track);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--scrollbar-thumb);
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 62, 108, 0.3);
+            background: rgba(var(--accent-coral-rgb), 0.3);
         }
 
         /* Container Layout */
@@ -137,7 +344,7 @@
             font-size: 1.6rem;
             font-weight: 700;
             letter-spacing: -0.5px;
-            background: linear-gradient(to right, #FFFFFF, var(--text-secondary));
+            background: var(--logo-text-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -155,18 +362,29 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.04);
+            background: var(--api-badge-bg);
             border: 1px solid var(--border-color);
             padding: 0.5rem 1rem;
             border-radius: 50px;
             font-size: 0.85rem;
             cursor: pointer;
             transition: var(--transition-smooth);
+            color: var(--text-primary);
+        }
+
+        button.api-badge {
+            font-family: inherit;
+            margin: 0;
+        }
+
+        .api-badge:focus-visible {
+            outline: 2px solid var(--accent-violet);
+            outline-offset: 2px;
         }
 
         .api-badge:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 62, 108, 0.3);
+            background: var(--api-badge-hover-bg);
+            border-color: rgba(var(--accent-coral-rgb), 0.3);
         }
 
         .api-status-dot {
@@ -223,11 +441,11 @@
 
         .api-input-group input {
             flex: 1;
-            background: rgba(0, 0, 0, 0.2);
+            background: var(--input-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             padding: 0.75rem 1rem;
-            color: #fff;
+            color: var(--input-text);
             font-family: var(--font-mono);
             font-size: 0.9rem;
             transition: var(--transition-smooth);
@@ -235,8 +453,8 @@
 
         .api-input-group input:focus {
             outline: none;
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 10px rgba(var(--accent-cyan-rgb), 0.15);
         }
 
         .btn {
@@ -267,13 +485,13 @@
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.06);
+            background: var(--btn-secondary-bg);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--btn-secondary-hover-bg);
             transform: translateY(-2px);
             box-shadow: none;
         }
@@ -350,12 +568,12 @@
 
         .playlist-input-wrapper input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--input-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 1rem 1.25rem;
             padding-left: 2.75rem;
-            color: white;
+            color: var(--input-text);
             font-size: 1rem;
             font-family: var(--font-body);
             transition: var(--transition-smooth);
@@ -363,8 +581,8 @@
 
         .playlist-input-wrapper input:focus {
             outline: none;
-            border-color: var(--accent-coral);
-            box-shadow: 0 0 15px rgba(255, 62, 108, 0.15);
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 15px rgba(var(--accent-coral-rgb), 0.15);
         }
 
         .input-icon {
@@ -424,7 +642,7 @@
         .spinner-outer {
             width: 70px;
             height: 70px;
-            border: 3px solid rgba(255, 62, 108, 0.15);
+            border: 3px solid rgba(var(--accent-coral-rgb), 0.15);
             border-top: 3px solid var(--accent-coral);
             border-right: 3px solid var(--accent-violet);
             border-radius: 50%;
@@ -455,7 +673,7 @@
             width: 100%;
             max-width: 400px;
             height: 6px;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--progress-bar-track);
             border-radius: 3px;
             margin: 1.5rem auto 0;
             overflow: hidden;
@@ -523,8 +741,8 @@
 
         /* Stats Cards */
         .duration-card {
-            background: linear-gradient(135deg, var(--bg-surface), rgba(18, 22, 37, 0.9));
-            border: 1px solid rgba(255, 62, 108, 0.2);
+            background: linear-gradient(135deg, var(--bg-surface), var(--duration-card-bg-end));
+            border: 1px solid rgba(var(--accent-coral-rgb), 0.2);
             border-radius: var(--radius-lg);
             padding: 2rem;
             box-shadow: var(--shadow-md), var(--glow-coral);
@@ -538,7 +756,7 @@
             top: 0; right: 0;
             width: 120px;
             height: 120px;
-            background: radial-gradient(circle, rgba(255, 62, 108, 0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(var(--accent-coral-rgb), 0.08) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -576,13 +794,13 @@
             font-weight: 700;
             letter-spacing: -1.5px;
             line-height: 1;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            color: var(--duration-hms-color);
+            text-shadow: var(--duration-hms-shadow);
         }
 
         .btn-copy-duration {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--copy-btn-bg);
+            border: 1px solid var(--copy-btn-border);
             color: var(--text-secondary);
             cursor: pointer;
             padding: 0.4rem 0.8rem;
@@ -596,7 +814,7 @@
         }
 
         .btn-copy-duration:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--btn-secondary-hover-bg);
             color: var(--text-primary);
             border-color: var(--accent-coral);
         }
@@ -628,7 +846,7 @@
         }
 
         .mini-stat-item {
-            background: rgba(0, 0, 0, 0.2);
+            background: var(--mini-stat-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 1rem;
@@ -676,7 +894,7 @@
         }
 
         .speed-btn {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--speed-btn-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 0.85rem 0.5rem;
@@ -690,21 +908,21 @@
         }
 
         .speed-btn:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(124, 58, 237, 0.4);
+            background: var(--speed-btn-hover-bg);
+            border-color: rgba(var(--accent-violet-rgb), 0.4);
         }
 
         .speed-btn.active {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(255, 62, 108, 0.15));
+            background: linear-gradient(135deg, rgba(var(--accent-violet-rgb), 0.2), rgba(var(--accent-coral-rgb), 0.15));
             border-color: var(--accent-violet);
-            box-shadow: 0 0 15px rgba(124, 58, 237, 0.15);
+            box-shadow: 0 0 15px rgba(var(--accent-violet-rgb), 0.15);
         }
 
         .speed-multiplier {
             font-family: var(--font-display);
             font-size: 1.2rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
         }
 
         .speed-time {
@@ -745,13 +963,13 @@
         }
 
         .slider-value-badge {
-            background: rgba(0, 242, 254, 0.1);
+            background: rgba(var(--accent-cyan-rgb), 0.1);
             color: var(--accent-cyan);
             font-family: var(--font-mono);
             font-weight: bold;
             padding: 0.2rem 0.6rem;
             border-radius: 12px;
-            border: 1px solid rgba(0, 242, 254, 0.2);
+            border: 1px solid rgba(var(--accent-cyan-rgb), 0.2);
             font-size: 0.85rem;
         }
 
@@ -766,7 +984,7 @@
             width: 100%;
             height: 6px;
             border-radius: 3px;
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--slider-track-bg);
             outline: none;
             transition: background 0.3s;
         }
@@ -789,11 +1007,11 @@
 
         .num-input-box {
             width: 60px;
-            background: rgba(0,0,0,0.2);
+            background: var(--input-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             padding: 0.4rem;
-            color: white;
+            color: var(--input-text);
             font-family: var(--font-mono);
             font-size: 0.85rem;
             text-align: center;
@@ -805,7 +1023,7 @@
         }
 
         .sim-results-box {
-            background: rgba(0, 0, 0, 0.25);
+            background: var(--sim-results-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 1.25rem;
@@ -828,7 +1046,7 @@
 
         .sim-result-value {
             font-weight: 600;
-            color: #fff;
+            color: var(--text-primary);
             text-align: right;
         }
 
@@ -865,7 +1083,7 @@
         }
 
         .tracklist-count-badge {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--api-badge-bg);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
             font-size: 0.75rem;
@@ -889,12 +1107,12 @@
 
         .search-wrapper input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            background: var(--input-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 0.65rem 1rem;
             padding-left: 2.25rem;
-            color: #fff;
+            color: var(--input-text);
             font-size: 0.85rem;
             font-family: var(--font-body);
             transition: var(--transition-smooth);
@@ -917,7 +1135,7 @@
         }
 
         .select-sort {
-            background: rgba(0, 0, 0, 0.2);
+            background: var(--input-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 0.65rem 1rem;
@@ -932,14 +1150,14 @@
 
         .select-sort:focus {
             border-color: var(--accent-violet);
-            color: #fff;
+            color: var(--text-primary);
         }
 
         /* Track Container Scrollable */
         .track-container {
             flex: 1;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding-right: 0.5rem;
             margin-bottom: 1.5rem;
@@ -951,15 +1169,15 @@
             gap: 1rem;
             padding: 0.85rem;
             border-radius: var(--radius-md);
-            background: rgba(255, 255, 255, 0.01);
+            background: var(--track-card-bg);
             border: 1px solid transparent;
             margin-bottom: 0.75rem;
             transition: var(--transition-smooth);
         }
 
         .track-card:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: var(--card-hover-bg);
+            border-color: var(--card-hover-border);
             transform: translateX(4px);
         }
 
@@ -980,7 +1198,7 @@
             position: relative;
             background: #000;
             flex-shrink: 0;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid var(--thumb-border);
         }
 
         .track-thumb {
@@ -1021,7 +1239,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent-cyan);
-            background: rgba(0, 242, 254, 0.08);
+            background: rgba(var(--accent-cyan-rgb), 0.08);
             padding: 0.05rem 0.4rem;
             border-radius: 4px;
         }
@@ -1062,7 +1280,7 @@
         }
 
         .btn-export-pill {
-            background: rgba(255,255,255,0.03);
+            background: var(--export-btn-bg);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
             font-size: 0.75rem;
@@ -1075,8 +1293,8 @@
         }
 
         .btn-export-pill:hover {
-            background: rgba(255,255,255,0.08);
-            color: #fff;
+            background: var(--export-btn-hover-bg);
+            color: var(--text-primary);
             border-color: var(--accent-violet);
         }
 
@@ -1192,8 +1410,8 @@
 
         .history-card:hover {
             transform: translateY(-4px);
-            border-color: rgba(0, 242, 254, 0.3);
-            box-shadow: var(--shadow-md), 0 0 15px rgba(0, 242, 254, 0.15);
+            border-color: rgba(var(--accent-cyan-rgb), 0.3);
+            box-shadow: var(--shadow-md), 0 0 15px rgba(var(--accent-cyan-rgb), 0.15);
         }
 
         .history-card-thumb-wrapper {
@@ -1226,7 +1444,7 @@
         .history-card-title {
             font-size: 0.95rem;
             font-weight: 600;
-            color: #fff;
+            color: var(--text-primary);
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -1244,7 +1462,7 @@
         }
 
         .history-card-count {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--api-badge-bg);
             padding: 0.15rem 0.5rem;
             border-radius: 4px;
             color: var(--text-secondary);
@@ -1261,8 +1479,8 @@
             position: absolute;
             top: 0.5rem;
             right: 0.5rem;
-            background: rgba(8, 10, 16, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--delete-btn-bg);
+            border: 1px solid var(--border-color);
             color: #F87171;
             width: 26px;
             height: 26px;
@@ -1294,7 +1512,7 @@
             width: 380px;
             max-width: 100%;
             height: 100vh;
-            background: rgba(12, 16, 28, 0.96);
+            background: var(--history-drawer-bg);
             backdrop-filter: blur(20px);
             border-left: 1px solid var(--border-color);
             box-shadow: -10px 0 35px rgba(0, 0, 0, 0.7);
@@ -1337,11 +1555,11 @@
 
         .history-controls input {
             flex: 1;
-            background: rgba(0, 0, 0, 0.25);
+            background: var(--input-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             padding: 0.5rem 0.75rem;
-            color: #fff;
+            color: var(--input-text);
             font-size: 0.85rem;
             outline: none;
             font-family: var(--font-body);
@@ -1383,7 +1601,7 @@
         .history-drawer-item {
             display: flex;
             gap: 0.75rem;
-            background: rgba(255, 255, 255, 0.02);
+            background: var(--history-drawer-item-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 0.6rem;
@@ -1394,8 +1612,8 @@
         }
 
         .history-drawer-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(124, 58, 237, 0.4);
+            background: var(--card-hover-bg);
+            border-color: rgba(var(--accent-violet-rgb), 0.4);
             transform: translateX(-2px);
         }
 
@@ -1406,7 +1624,7 @@
             border-radius: 6px;
             background: #000;
             flex-shrink: 0;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid var(--thumb-border);
         }
 
         .history-drawer-item-details {
@@ -1417,7 +1635,7 @@
         .history-drawer-item-title {
             font-size: 0.85rem;
             font-weight: 500;
-            color: #fff;
+            color: var(--text-primary);
             display: -webkit-box;
             -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
@@ -1438,8 +1656,8 @@
             top: 50%;
             right: 0.5rem;
             transform: translateY(-50%);
-            background: rgba(8, 10, 16, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--delete-btn-bg);
+            border: 1px solid var(--border-color);
             color: #F87171;
             width: 22px;
             height: 22px;
@@ -1464,12 +1682,12 @@
 
         /* Empty & Animate States */
         .empty-history-box {
-            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border: 1px dashed var(--empty-history-border);
             border-radius: var(--radius-md);
             padding: 3.5rem 1.5rem;
             text-align: center;
             color: var(--text-secondary);
-            background: rgba(255, 255, 255, 0.01);
+            background: var(--empty-history-bg);
         }
 
         .empty-history-icon {
@@ -1480,6 +1698,11 @@
             stroke-width: 1.5;
         }
 
+        .track-duration-badge.unavailable {
+            color: #EF4444 !important;
+            background: rgba(239, 68, 68, 0.1) !important;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1487,6 +1710,28 @@
 
         .animated-fade-in {
             animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Mobile Adaptations */
+        @media (max-width: 768px) {
+            .api-input-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .api-input-group button {
+                width: 100%;
+                justify-content: center;
+            }
+            .tracklist-panel {
+                max-height: none !important;
+            }
+            .track-container {
+                overflow-y: visible !important;
+                max-height: none !important;
+            }
+            .history-drawer {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -1511,18 +1756,37 @@
             </div>
             
             <div style="display: flex; gap: 0.75rem; align-items: center;">
-                <div class="api-badge" id="history-badge-trigger" onclick="toggleHistoryDrawer(true)">
+                <button class="api-badge" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle between Dark and Light mode">
+                    <!-- Sun Icon (shows in Light Mode) -->
+                    <svg class="theme-icon-sun" viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <!-- Moon Icon (shows in Dark Mode) -->
+                    <svg class="theme-icon-moon" viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; display: none;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span id="theme-toggle-text">Theme</span>
+                </button>
+                <button class="api-badge" id="history-badge-trigger" onclick="toggleHistoryDrawer(true)" aria-label="Open History Log" title="Open History Log">
                     <!-- History Icon (Clock with counter-clockwise arrow) -->
                     <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; margin-right: 0.25rem;">
                         <path d="M12 8v4l3 3"/>
                         <circle cx="12" cy="12" r="9"/>
                     </svg>
                     <span>History</span>
-                </div>
-                <div class="api-badge" id="api-badge-trigger" onclick="toggleApiDrawer()">
+                </button>
+                <button class="api-badge" id="api-badge-trigger" onclick="toggleApiDrawer()" aria-label="Configure API Key" title="Configure API Key">
                     <div class="api-status-dot" id="api-status-dot"></div>
                     <span id="api-status-text">Set API Key</span>
-                </div>
+                </button>
             </div>
         </header>
 
@@ -1630,7 +1894,7 @@
                 <!-- Main Duration Stats Card -->
                 <div class="duration-card">
                     <div class="card-eyebrow">Playlist Telemetry</div>
-                    <div class="playlist-title-display" id="playlist-title">Custom Development Course</div>
+                    <h2 class="playlist-title-display" id="playlist-title">Custom Development Course</h2>
                     
                     <div class="duration-display-group">
                         <div class="duration-hms" id="duration-display-hms">04:41:40</div>
@@ -1801,6 +2065,19 @@
 
     <script>
         // ==========================================
+        // UTILITY FUNCTIONS & SECURITY SANITIZATION
+        // ==========================================
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // ==========================================
         // CONFIGURATION & GLOBAL STATE
         // ==========================================
         
@@ -1814,8 +2091,45 @@
             videos: [], // Contains: { id, title, thumbnail, duration, position }
             filteredVideos: [],
             activeSpeed: 1.0,
-            watchHoursPerDay: 1.5
+            watchHoursPerDay: 1.5,
+            isLoading: false
         };
+
+        // ==========================================
+        // THEME MANAGEMENT SYSTEM
+        // ==========================================
+        function initTheme() {
+            const savedTheme = localStorage.getItem('vidsum_theme');
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                setTheme(savedTheme);
+            } else {
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                setTheme(systemPrefersDark ? 'dark' : 'light');
+            }
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const toggleText = document.getElementById('theme-toggle-text');
+            if (toggleText) {
+                toggleText.textContent = theme === 'dark' ? 'Dark Mode' : 'Light Mode';
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+            localStorage.setItem('vidsum_theme', newTheme);
+            showToast(`Switched to ${newTheme === 'dark' ? 'Dark' : 'Light'} Mode`);
+        }
+
+        // Listen for system theme changes if no preference is saved
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('vidsum_theme')) {
+                setTheme(e.matches ? 'dark' : 'light');
+            }
+        });
 
         // Real-world high-quality demo video items (Web Dev & Tech)
         const DEMO_VIDEOS = [
@@ -1893,6 +2207,7 @@
 
         // Initialize App on window load
         window.addEventListener('load', () => {
+            initTheme();
             initializeApiKey();
             loadHistory();
             showDashboard(false); // Make sure landing page is default on load/refresh
@@ -2035,7 +2350,7 @@
         // ISO 8601 Durations to Seconds Converter (PT1H2M10S -> 3730)
         function parseISO8601Duration(durationStr) {
             if (!durationStr) return 0;
-            const regex = /P(?:([0-9]+)D)?T(?:([0-9]+)H)?(?:([0-9]+)M)?(?:([0-9]+)S)?/;
+            const regex = /^P(?:([0-9]+)D)?(?:T(?:([0-9]+)H)?(?:([0-9]+)M)?(?:([0-9]+)S)?)?$/;
             const matches = durationStr.match(regex);
             if (!matches) return 0;
             
@@ -2077,8 +2392,14 @@
                 
                 const response = await fetch(listUrl);
                 if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error?.message || "YouTube API error occurred");
+                    let errMsg = "YouTube API error occurred";
+                    try {
+                        const errData = await response.json();
+                        errMsg = errData.error?.message || errMsg;
+                    } catch (e) {
+                        errMsg = `HTTP Error ${response.status}: ${response.statusText}`;
+                    }
+                    throw new Error(errMsg);
                 }
                 
                 const data = await response.json();
@@ -2104,35 +2425,51 @@
                 throw new Error("This playlist contains no videos or is private.");
             }
 
-            // Step 3: Fetch exact durations for all videos in batches of 50
+            // Step 3: Fetch exact durations for all videos in parallel batches of 50
             const batchSize = 50;
+            const batchPromises = [];
+            const totalBatches = Math.ceil(allItems.length / batchSize);
+            let finishedBatches = 0;
+
             for (let i = 0; i < allItems.length; i += batchSize) {
                 const batch = allItems.slice(i, i + batchSize);
                 const ids = batch.map(b => b.id).join(',');
-                const progressPct = 30 + Math.floor((i / allItems.length) * 70);
-                
-                updateLoadingStatus(`Fetching video durations... batch ${Math.floor(i/50) + 1} of ${Math.ceil(allItems.length/50)}`, progressPct);
                 
                 const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${ids}&key=${apiKey}`;
-                const videoResponse = await fetch(videoUrl);
-                if (!videoResponse.ok) {
-                    const errData = await videoResponse.json();
-                    throw new Error(errData.error?.message || "Failed to retrieve durations.");
-                }
-                
-                const videoData = await videoResponse.json();
-                const durationMap = {};
-                if (videoData.items) {
-                    videoData.items.forEach(v => {
-                        durationMap[v.id] = parseISO8601Duration(v.contentDetails.duration);
+                batchPromises.push((async (currentBatch) => {
+                    const videoResponse = await fetch(videoUrl);
+                    if (!videoResponse.ok) {
+                        let errMsg = "Failed to retrieve durations.";
+                        try {
+                            const errData = await videoResponse.json();
+                            errMsg = errData.error?.message || errMsg;
+                        } catch (e) {
+                            errMsg = `HTTP Error ${videoResponse.status}: ${videoResponse.statusText}`;
+                        }
+                        throw new Error(errMsg);
+                    }
+                    
+                    const videoData = await videoResponse.json();
+                    const durationMap = {};
+                    if (videoData.items) {
+                        videoData.items.forEach(v => {
+                            durationMap[v.id] = parseISO8601Duration(v.contentDetails.duration);
+                        });
+                    }
+                    
+                    // Map the results back to the items array
+                    currentBatch.forEach(b => {
+                        b.duration = durationMap[b.id] || 0;
                     });
-                }
-                
-                // Map the results back to the items array
-                batch.forEach(b => {
-                    b.duration = durationMap[b.id] || 0;
-                });
+
+                    finishedBatches++;
+                    const progressPct = 30 + Math.floor((finishedBatches / totalBatches) * 70);
+                    updateLoadingStatus(`Fetching video durations... batch ${finishedBatches} of ${totalBatches}`, progressPct);
+                })(batch));
             }
+
+            // Await all parallel batch fetches
+            await Promise.all(batchPromises);
 
             return {
                 title: playlistTitle,
@@ -2141,11 +2478,47 @@
             };
         }
 
-        // ==========================================
-        // EVENT HANDLERS & SIMULATOR LOGIC
-        // ==========================================
+        function setLoading(isLoading) {
+            state.isLoading = isLoading;
+            const analyzeBtn = document.getElementById('btn-analyze');
+            const urlInput = document.getElementById('playlist-url-input');
+            const demoBtn = document.querySelector('.demo-btn');
+            
+            if (isLoading) {
+                if (analyzeBtn) {
+                    analyzeBtn.disabled = true;
+                    analyzeBtn.style.opacity = '0.7';
+                    const span = analyzeBtn.querySelector('span');
+                    if (span) span.textContent = 'Loading...';
+                }
+                if (urlInput) urlInput.disabled = true;
+                if (demoBtn) {
+                    demoBtn.disabled = true;
+                    demoBtn.style.opacity = '0.5';
+                }
+            } else {
+                if (analyzeBtn) {
+                    analyzeBtn.disabled = false;
+                    analyzeBtn.style.opacity = '1';
+                    const span = analyzeBtn.querySelector('span');
+                    if (span) span.textContent = 'Load Playlist';
+                }
+                if (urlInput) urlInput.disabled = false;
+                if (demoBtn) {
+                    demoBtn.disabled = false;
+                    demoBtn.style.opacity = '1';
+                }
+            }
+        }
 
         async function analyzePlaylist() {
+            if (state.isLoading) return;
+            
+            if (!navigator.onLine) {
+                showError("Connection Offline", "You are currently disconnected from the internet. Please restore connectivity and try again.");
+                return;
+            }
+
             const input = document.getElementById('playlist-url-input').value.trim();
             const errorSection = document.getElementById('error-section');
             const loadingSection = document.getElementById('loading-section');
@@ -2170,6 +2543,7 @@
             state.playlistId = playlistId;
             loadingSection.style.display = 'block';
             updateLoadingStatus("Connecting to YouTube APIs...", 10);
+            setLoading(true);
 
             try {
                 const result = await fetchPlaylistItems(playlistId, state.apiKey);
@@ -2192,6 +2566,8 @@
             } catch (err) {
                 loadingSection.style.display = 'none';
                 showError("API Execution Error", err.message || "An unexpected error occurred while communicating with YouTube servers.");
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -2356,9 +2732,19 @@
                 history.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'history-card';
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('tabindex', '0');
+                    card.setAttribute('aria-label', `Load playlist: ${item.title}`);
                     card.onclick = (e) => {
                         if (e.target.closest('.history-card-delete-btn')) return;
                         reopenPlaylist(item);
+                    };
+                    card.onkeydown = (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            if (e.target.closest('.history-card-delete-btn')) return;
+                            reopenPlaylist(item);
+                        }
                     };
                     
                     const formattedDate = new Date(item.timestamp).toLocaleDateString(undefined, {
@@ -2369,14 +2755,14 @@
                     });
                     
                     card.innerHTML = `
-                        <button class="history-card-delete-btn" title="Delete from history" onclick="deleteHistoryItem('${item.id}', event)">
+                        <button class="history-card-delete-btn" title="Delete from history" aria-label="Delete ${escapeHTML(item.title)} from history" onclick="deleteHistoryItem('${escapeHTML(item.id)}', event)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                         </button>
                         <div class="history-card-thumb-wrapper">
-                            <img class="history-card-thumb" src="${item.thumbnail}" alt="${item.title}" loading="lazy">
+                            <img class="history-card-thumb" src="${escapeHTML(item.thumbnail)}" alt="${escapeHTML(item.title)}" loading="lazy">
                         </div>
                         <div class="history-card-details">
-                            <div class="history-card-title" title="${item.title}">${item.title}</div>
+                            <div class="history-card-title" title="${escapeHTML(item.title)}">${escapeHTML(item.title)}</div>
                             <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Analyzed: ${formattedDate}</div>
                             <div class="history-card-meta">
                                 <span class="history-card-count">${item.videoCount} videos</span>
@@ -2404,19 +2790,30 @@
                 history.forEach(item => {
                     const itemEl = document.createElement('div');
                     itemEl.className = 'history-drawer-item';
+                    itemEl.setAttribute('role', 'button');
+                    itemEl.setAttribute('tabindex', '0');
+                    itemEl.setAttribute('aria-label', `Load playlist: ${item.title}`);
                     itemEl.onclick = (e) => {
                         if (e.target.closest('.history-drawer-item-delete')) return;
                         reopenPlaylist(item);
                         toggleHistoryDrawer(false);
                     };
+                    itemEl.onkeydown = (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            if (e.target.closest('.history-drawer-item-delete')) return;
+                            reopenPlaylist(item);
+                            toggleHistoryDrawer(false);
+                        }
+                    };
                     
                     itemEl.innerHTML = `
-                        <button class="history-drawer-item-delete" title="Delete" onclick="deleteHistoryItem('${item.id}', event)">
+                        <button class="history-drawer-item-delete" title="Delete" aria-label="Delete ${escapeHTML(item.title)} from history" onclick="deleteHistoryItem('${escapeHTML(item.id)}', event)">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                         </button>
-                        <img class="history-drawer-item-thumb" src="${item.thumbnail}" alt="${item.title}">
+                        <img class="history-drawer-item-thumb" src="${escapeHTML(item.thumbnail)}" alt="${escapeHTML(item.title)}">
                         <div class="history-drawer-item-details">
-                            <div class="history-drawer-item-title" title="${item.title}">${item.title}</div>
+                            <div class="history-drawer-item-title" title="${escapeHTML(item.title)}">${escapeHTML(item.title)}</div>
                             <div class="history-drawer-item-meta">
                                 <span>${item.videoCount} videos</span>
                                 <span style="color: var(--accent-cyan);">${formatSecondsShort(item.totalDuration)}</span>
@@ -2478,7 +2875,9 @@
             document.getElementById('duration-display-human').textContent = formatSecondsToHuman(totalSeconds);
             document.getElementById('stat-video-count').textContent = state.videos.length;
             
-            const avgSeconds = state.videos.length > 0 ? Math.round(totalSeconds / state.videos.length) : 0;
+            // Exclude unavailable videos from average duration calculation
+            const availableVideos = state.videos.filter(v => v.duration > 0);
+            const avgSeconds = availableVideos.length > 0 ? Math.round(totalSeconds / availableVideos.length) : 0;
             document.getElementById('stat-avg-duration').textContent = formatSecondsShort(avgSeconds);
 
             // 3. Update Speeds matrix times
@@ -2526,17 +2925,21 @@
                     ? `https://www.youtube.com/watch?v=${vid.id}&list=${state.playlistId}&index=${vid.position + 1}`
                     : `https://youtu.be/${vid.id}`;
                 
+                const isUnavailable = vid.duration === 0;
+                const durationText = isUnavailable ? "Unavailable" : formatSecondsShort(vid.duration);
+                const durationClass = isUnavailable ? "track-duration-badge unavailable" : "track-duration-badge";
+
                 card.innerHTML = `
                     <div class="track-number">${vid.position + 1}</div>
                     <div class="track-thumb-wrapper">
-                        <img class="track-thumb" src="${vid.thumbnail}" alt="${vid.title}" loading="lazy">
+                        <img class="track-thumb" src="${escapeHTML(vid.thumbnail)}" alt="${escapeHTML(vid.title)}" loading="lazy">
                     </div>
                     <div class="track-details">
-                        <a class="track-title-link" href="${watchUrl}" target="_blank" rel="noopener" title="${vid.title}">
-                            ${vid.title}
+                        <a class="track-title-link" href="${escapeHTML(watchUrl)}" target="_blank" rel="noopener" title="${escapeHTML(vid.title)}">
+                            ${escapeHTML(vid.title)}
                         </a>
                         <div class="track-badge-group">
-                            <span class="track-duration-badge">${formatSecondsShort(vid.duration)}</span>
+                            <span class="${durationClass}">${escapeHTML(durationText)}</span>
                         </div>
                     </div>
                     <!-- External Link Arrow -->
@@ -2593,6 +2996,10 @@
         function onNumInputChange(val) {
             let parsedVal = parseFloat(val);
             if (isNaN(parsedVal) || parsedVal <= 0) {
+                // Fallback to default silently in state so simulation continues
+                state.watchHoursPerDay = 1.5;
+                document.getElementById('slider-val-display').textContent = `1.5 hours`;
+                runSimulations();
                 return;
             }
             if (parsedVal > 24) {
@@ -2646,21 +3053,25 @@
         // ==========================================
 
         async function copyPlaylistDuration() {
+            const button = document.getElementById('btn-copy-duration');
+            if (button.classList.contains('copied')) return;
+
             const totalOriginalSeconds = state.videos.reduce((sum, v) => sum + v.duration, 0);
             const hmsText = formatSecondsToHMS(totalOriginalSeconds);
-            const button = document.getElementById('btn-copy-duration');
             
             try {
-                await navigator.clipboard.writeText(hmsText);
                 button.classList.add('copied');
                 const origText = button.querySelector('span').textContent;
                 button.querySelector('span').textContent = 'Copied!';
+                
+                await copyStringToClipboard(hmsText, "Duration string copied: " + hmsText);
+                
                 setTimeout(() => {
                     button.classList.remove('copied');
                     button.querySelector('span').textContent = origText;
                 }, 2000);
-                showToast("Duration string copied: " + hmsText);
             } catch (err) {
+                button.classList.remove('copied');
                 console.error("Clipboard copy failed", err);
             }
         }
@@ -2689,7 +3100,9 @@
                 textContent += `|---|-------|----------|------|\n`;
                 state.videos.forEach((v, i) => {
                     const url = `https://youtu.be/${v.id}`;
-                    textContent += `| ${i + 1} | [${v.title}](${url}) | ${formatSecondsShort(v.duration)} | [Watch](${url}) |\n`;
+                    // Escape vertical pipes to keep markdown table layout intact
+                    const cleanMarkdownTitle = v.title.replace(/\|/g, '\\|');
+                    textContent += `| ${i + 1} | [${cleanMarkdownTitle}](${url}) | ${formatSecondsShort(v.duration)} | [Watch](${url}) |\n`;
                 });
             } else if (format === 'csv') {
                 textContent = `"Index","Video Title","Duration Seconds","Duration Text","Video URL"\n`;
@@ -2705,12 +3118,34 @@
         }
 
         async function copyStringToClipboard(str, successMessage) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(str);
+                    showToast(successMessage);
+                    return;
+                } catch (err) {
+                    console.warn("navigator.clipboard failed, trying fallback", err);
+                }
+            }
+            
+            // Fallback copy utility
             try {
-                await navigator.clipboard.writeText(str);
-                showToast(successMessage);
+                const textarea = document.createElement('textarea');
+                textarea.value = str;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                if (successful) {
+                    showToast(successMessage);
+                } else {
+                    throw new Error("Fallback copy command rejected");
+                }
             } catch (err) {
-                console.error("Failed to copy", err);
-                showToast("Clipboard write permission blocked.", true);
+                console.error("Fallback copy failed", err);
+                showToast("Failed to copy to clipboard.", true);
             }
         }
 
