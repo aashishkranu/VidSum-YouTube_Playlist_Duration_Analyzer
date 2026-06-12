@@ -45,12 +45,21 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Basic Security Headers Middleware
+// Basic Security Headers & Content-Security-Policy Middleware
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "font-src 'self' https://fonts.gstatic.com; " +
+    "img-src 'self' data: https://img.youtube.com https://i.ytimg.com https://via.placeholder.com; " +
+    "connect-src 'self' *;"
+  );
   next();
 });
 
@@ -131,12 +140,20 @@ function parsePlaylistId(input) {
   return null;
 }
 
+// Memory map to store the last refresh timestamp for server-keyed playlists (5 min cooldown to prevent quota drainage)
+const serverKeyRefreshCooldown = new Map();
+
 // API Endpoint: Analyze Playlist
 app.get('/api/playlist', async (req, res) => {
   const urlParam = req.query.url;
   
   if (!urlParam) {
     return res.status(400).json({ error: 'Playlist URL or ID is required.' });
+  }
+
+  // Security: Check input length to prevent denial-of-service/regex backtracking
+  if (urlParam.length > 2048) {
+    return res.status(400).json({ error: 'Playlist URL or ID input is too long (maximum 2048 characters).' });
   }
 
   const playlistId = parsePlaylistId(urlParam);
@@ -168,8 +185,31 @@ app.get('/api/playlist', async (req, res) => {
     cacheKey = `${playlistId}_server`;
   }
   
-  // Only use cache if it is not a direct force refresh request
+  // Rate limiting / Quota abuse prevention for force refresh on server-keyed requests
   const forceRefresh = req.query.refresh === 'true';
+
+  // Clean up old cooldown entries periodically to prevent memory leak
+  if (serverKeyRefreshCooldown.size > 1000) {
+    const fiveMinsAgo = Date.now() - 300000;
+    for (const [key, value] of serverKeyRefreshCooldown.entries()) {
+      if (value < fiveMinsAgo) {
+        serverKeyRefreshCooldown.delete(key);
+      }
+    }
+  }
+
+  if (forceRefresh && !isCustomKey) {
+    const lastRefresh = serverKeyRefreshCooldown.get(playlistId);
+    const now = Date.now();
+    if (lastRefresh && (now - lastRefresh < 300000)) { // 5 minutes cooldown
+      const cachedData = playlistCache.get(cacheKey);
+      if (cachedData) {
+        return res.json({ ...cachedData, _cached: true, _refresh_throttled: true });
+      }
+    }
+    serverKeyRefreshCooldown.set(playlistId, now);
+  }
+
   if (!forceRefresh) {
     const cachedData = playlistCache.get(cacheKey);
     if (cachedData) {
@@ -181,6 +221,8 @@ app.get('/api/playlist', async (req, res) => {
     let playlistTitle = 'YouTube Playlist';
     let playlistThumbnail = '';
     
+    let playlistPublishedAt = '';
+    
     // Step 1: Retrieve Playlist general snippet information
     try {
       const playlistDetailsRes = await axios.get(
@@ -190,7 +232,8 @@ app.get('/api/playlist', async (req, res) => {
             part: 'snippet',
             id: playlistId,
             key: apiKey
-          }
+          },
+          timeout: 10000
         }
       );
       
@@ -201,6 +244,7 @@ app.get('/api/playlist', async (req, res) => {
           || snippet.thumbnails?.default?.url 
           || snippet.thumbnails?.high?.url 
           || '';
+        playlistPublishedAt = snippet.publishedAt || '';
       }
     } catch (err) {
       console.warn(`Could not fetch playlist snippet for ${playlistId}, falling back to defaults.`, err.message);
@@ -214,16 +258,21 @@ app.get('/api/playlist', async (req, res) => {
     let hasNextPage = true;
 
     while (hasNextPage) {
+      const params = {
+        part: 'snippet,contentDetails',
+        playlistId: playlistId,
+        maxResults: 50,
+        key: apiKey
+      };
+      if (nextPageToken) {
+        params.pageToken = nextPageToken;
+      }
+
       const response = await axios.get(
         `https://www.googleapis.com/youtube/v3/playlistItems`,
         {
-          params: {
-            part: 'snippet,contentDetails',
-            playlistId: playlistId,
-            maxResults: 50,
-            pageToken: nextPageToken,
-            key: apiKey
-          }
+          params,
+          timeout: 10000
         }
       );
 
@@ -270,7 +319,8 @@ app.get('/api/playlist', async (req, res) => {
             part: 'contentDetails',
             id: videoIds,
             key: apiKey
-          }
+          },
+          timeout: 10000
         }).then(videoResponse => {
           const videoData = videoResponse.data;
           const durationMap = {};
@@ -307,6 +357,7 @@ app.get('/api/playlist', async (req, res) => {
     const result = {
       title: playlistTitle,
       thumbnail: playlistThumbnail,
+      publishedAt: playlistPublishedAt,
       videoCount,
       totalDuration,
       playbackSpeedDurations: {
@@ -337,6 +388,12 @@ app.get('/api/playlist', async (req, res) => {
 // Fallback: Redirect all other requests to index.html (useful for Single Page App routing)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Global Error Handler Middleware to capture unhandled promise rejections or server exceptions safely
+app.use((err, req, res, next) => {
+  console.error('Global Unhandled Error:', err.stack || err.message);
+  res.status(500).json({ error: 'An unexpected internal server error occurred.' });
 });
 
 // Start Server

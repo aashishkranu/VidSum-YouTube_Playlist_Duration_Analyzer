@@ -205,6 +205,8 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Theme Toggle styles */
@@ -293,6 +295,7 @@
         /* Container Layout */
         .app-container {
             max-width: 1280px;
+            width: 100%;
             margin: 0 auto;
             padding: 2.5rem 1.5rem;
         }
@@ -942,6 +945,8 @@
             flex-direction: column;
             align-items: center;
             gap: 0.25rem;
+            font-family: inherit;
+            outline: none;
         }
 
         .speed-btn:hover {
@@ -1282,11 +1287,11 @@
         }
 
         .track-external-icon {
-            opacity: 0;
+            opacity: 0.5; /* Always visible for mobile accessibility/usability */
             transition: var(--transition-smooth);
             color: var(--text-muted);
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             flex-shrink: 0;
         }
 
@@ -1379,17 +1384,37 @@
 
         /* Footer */
         footer {
-            margin-top: 4rem;
+            margin-top: auto;
             text-align: center;
             color: var(--text-muted);
             font-size: 0.8rem;
             border-top: 1px solid var(--border-color);
-            padding-top: 1.5rem;
+            padding: 2.5rem 1.5rem;
+            width: 100%;
         }
 
         footer a {
             color: var(--accent-coral);
             text-decoration: none;
+        }
+
+        .footer-attribution {
+            margin-top: 0.35rem;
+            font-size: 0.75rem;
+        }
+
+        .developer-highlight {
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            transition: var(--transition-smooth);
+        }
+
+        .developer-highlight:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
         }
 
         /* History & Landing Container Styles */
@@ -1793,6 +1818,272 @@
                 width: 100%;
             }
         }
+
+        /* ==========================================
+           NEW FEATURES CUSTOM STYLES
+           ========================================== */
+
+        /* Drag and Drop visual style */
+        .playlist-input-wrapper.drag-over input {
+            border-color: var(--accent-cyan) !important;
+            box-shadow: var(--glow-cyan) !important;
+            background: rgba(0, 242, 254, 0.05) !important;
+        }
+
+        /* History Card Favorite Toggle button */
+        .history-card-favorite-btn {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--delete-btn-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: var(--transition-smooth);
+            z-index: 10;
+        }
+        .history-card:hover .history-card-favorite-btn,
+        .history-card-favorite-btn:focus,
+        .history-card:focus-within .history-card-favorite-btn {
+            opacity: 1;
+        }
+        .history-card-favorite-btn.active {
+            opacity: 1 !important;
+            color: #EF4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .history-card-favorite-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Dashboard Favorite Toggle Button */
+        .dashboard-favorite-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        .dashboard-favorite-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+        .dashboard-favorite-btn.active {
+            color: #EF4444;
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        html[data-theme="light"] .dashboard-favorite-btn {
+            background: rgba(15, 23, 42, 0.03);
+        }
+        html[data-theme="light"] .dashboard-favorite-btn:hover {
+            background: rgba(15, 23, 42, 0.06);
+        }
+        html[data-theme="light"] .dashboard-favorite-btn.active {
+            background: rgba(225, 29, 72, 0.1);
+            border-color: rgba(225, 29, 72, 0.3);
+        }
+
+        /* History Drawer Item Favorite toggle */
+        .history-drawer-item-favorite {
+            background: var(--delete-btn-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: var(--transition-smooth);
+            z-index: 10;
+            margin-right: 6px;
+        }
+        .history-drawer-item:hover .history-drawer-item-favorite,
+        .history-drawer-item-favorite:focus,
+        .history-drawer-item:focus-within .history-drawer-item-favorite {
+            opacity: 1;
+        }
+        .history-drawer-item-favorite.active {
+            opacity: 1 !important;
+            color: #EF4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        /* Tag system style */
+        .playlist-tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--accent-violet);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: var(--transition-smooth);
+        }
+        .playlist-tag:hover {
+            background: rgba(124, 58, 237, 0.18);
+        }
+        .playlist-tag-remove {
+            background: none;
+            border: none;
+            padding: 0 0 0 2px;
+            margin: 0;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.95rem;
+            line-height: 1;
+            font-family: inherit;
+        }
+        .playlist-tag-remove:hover {
+            color: #EF4444;
+        }
+        .history-tag {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            background: rgba(0, 242, 254, 0.08);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 242, 254, 0.15);
+        }
+        html[data-theme="light"] .history-tag {
+            background: rgba(14, 116, 144, 0.08);
+            color: #0E7490;
+            border-color: rgba(14, 116, 144, 0.15);
+        }
+
+        /* Interactive Checklist styles */
+        .track-checkbox-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            user-select: none;
+        }
+        .track-checkbox-btn:focus-visible {
+            outline: 2px solid var(--accent-cyan);
+            border-radius: 50%;
+        }
+        .track-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+        html[data-theme="light"] .track-checkbox {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(15, 23, 42, 0.15);
+        }
+        .track-checkbox-btn:hover .track-checkbox {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.05);
+        }
+        .track-checkbox .track-check-icon {
+            width: 12px;
+            height: 12px;
+            color: #fff;
+            opacity: 0;
+            transform: scale(0.6);
+            transition: var(--transition-smooth);
+        }
+        .track-checkbox .track-number-text {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            position: absolute;
+            transition: var(--transition-smooth);
+        }
+        .track-checkbox-btn:hover .track-number-text {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+        .track-checkbox-btn:hover .track-check-icon {
+            opacity: 0.6;
+            transform: scale(1);
+            color: var(--accent-cyan);
+        }
+        .track-checkbox.checked {
+            background: var(--accent-cyan) !important;
+            border-color: var(--accent-cyan) !important;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+        html[data-theme="light"] .track-checkbox.checked {
+            background: var(--accent-cyan) !important;
+            border-color: var(--accent-cyan) !important;
+            box-shadow: 0 0 10px rgba(14, 116, 144, 0.3);
+        }
+        .track-checkbox.checked .track-number-text {
+            opacity: 0 !important;
+            transform: scale(0.6) !important;
+        }
+        .track-checkbox.checked .track-check-icon {
+            opacity: 1 !important;
+            transform: scale(1) !important;
+            color: #080A10 !important;
+        }
+        html[data-theme="light"] .track-checkbox.checked .track-check-icon {
+            color: #ffffff !important;
+        }
+        .track-card.completed {
+            opacity: 0.5;
+            background: rgba(255, 255, 255, 0.005);
+        }
+        .track-card.completed .track-title-link {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+        .track-card.completed .track-thumb-wrapper {
+            filter: grayscale(1) opacity(0.5);
+        }
+
+        /* YouTube icon wrapping link button style */
+        .track-external-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            padding: 8px; /* Larger hit area */
+            border-radius: 4px;
+            transition: var(--transition-smooth);
+        }
+        .track-external-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
 <body>
@@ -1865,7 +2156,7 @@
                 </div>
 
                 <div class="api-input-group">
-                    <input type="password" id="api-key-input" placeholder="Paste your custom YouTube Data API v3 Key...">
+                    <input type="password" id="api-key-input" placeholder="Paste your custom YouTube Data API v3 Key..." aria-label="YouTube API Key">
                     <button class="btn" onclick="saveApiKey()">Save Key</button>
                     <button class="btn btn-danger" id="btn-remove-api-key" onclick="removeApiKey()" style="display: none;">Remove Key</button>
                 </div>
@@ -1878,7 +2169,7 @@
                 <div style="border-top: 1px solid var(--border-color); padding-top: 1.25rem; margin-top: 1.25rem;">
                     <h4 style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--text-primary);">Custom Backend Proxy URL (Optional)</h4>
                     <div class="api-input-group">
-                        <input type="text" id="backend-url-input" placeholder="e.g. https://your-backend-server.com">
+                        <input type="text" id="backend-url-input" placeholder="e.g. https://your-backend-server.com" aria-label="Custom backend proxy URL">
                         <button class="btn" onclick="saveBackendUrl()">Save URL</button>
                         <button class="btn btn-danger" id="btn-remove-backend-url" onclick="removeBackendUrl()" style="display: none;">Reset</button>
                     </div>
@@ -1899,7 +2190,7 @@
                 <div class="playlist-input-wrapper">
                     <!-- Input icon -->
                     <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                    <input type="text" id="playlist-url-input" placeholder="Paste YouTube playlist URL or ID (e.g. PLBCF2DAC1B7B8D3EC)">
+                    <input type="text" id="playlist-url-input" placeholder="Paste YouTube playlist URL or ID (e.g. PLBCF2DAC1B7B8D3EC)" aria-label="YouTube Playlist URL or ID">
                 </div>
                 <button class="btn btn-analyze" id="btn-analyze" onclick="analyzePlaylist()">
                     <span>Load Playlist</span>
@@ -1936,16 +2227,36 @@
 
         <!-- LANDING / HOME CONTAINER -->
         <div id="landing-container" class="landing-container">
+            <!-- FAVORITES PLAYLISTS SECTION -->
+            <div id="favorites-section" style="margin-bottom: 2.5rem; display: none;">
+                <div class="landing-header-row" style="margin-bottom: 1.5rem;">
+                    <h3 class="landing-title" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="#EF4444" stroke="#EF4444" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        Favorite Playlists
+                    </h3>
+                </div>
+                <div class="history-grid" id="favorites-grid">
+                    <!-- Favorite Cards will be loaded here -->
+                </div>
+            </div>
+
+            <!-- RECENT PLAYLISTS SECTION -->
             <div class="landing-header-row">
-                <h3 class="landing-title">
+                <h3 class="landing-title" style="display: flex; align-items: center; gap: 0.5rem;">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--accent-cyan);"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
                     Recent Playlists
                 </h3>
                 <div class="history-search-row">
                     <div class="search-wrapper" style="margin-bottom: 0;">
                         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" id="history-search" placeholder="Search history..." oninput="filterHistory()">
+                        <input type="text" id="history-search" placeholder="Search by title or tags..." oninput="filterHistoryDebounced()" aria-label="Search recent playlists by title or tags">
                     </div>
+                    <select class="select-sort" id="history-sort" onchange="filterHistory()" aria-label="Sort playlist history">
+                        <option value="date-added-desc">Date Analyzed (Newest)</option>
+                        <option value="date-added-asc">Date Analyzed (Oldest)</option>
+                        <option value="date-uploaded-desc">YouTube Upload Date (Newest)</option>
+                        <option value="date-uploaded-asc">YouTube Upload Date (Oldest)</option>
+                    </select>
                     <button class="btn-clear-history" onclick="clearHistory()">Clear History</button>
                 </div>
             </div>
@@ -1973,9 +2284,27 @@
                 
                 <!-- Main Duration Stats Card -->
                 <div class="duration-card">
-                    <div class="card-eyebrow">Playlist Telemetry</div>
-                    <h2 class="playlist-title-display" id="playlist-title">Custom Development Course</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                        <div class="card-eyebrow" style="margin-bottom: 0;">Playlist Telemetry</div>
+                        <button id="dashboard-favorite-btn" class="dashboard-favorite-btn" onclick="toggleCurrentPlaylistFavorite()" title="Toggle Favorite" aria-label="Toggle Favorite">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <h2 class="playlist-title-display" id="playlist-title" style="margin-top: 0;">Custom Development Course</h2>
                     
+                    <!-- Playlist custom tags container -->
+                    <div class="playlist-tags-container" style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Tags:</span>
+                        <div id="playlist-tags-list" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                            <!-- Tags here -->
+                        </div>
+                        <div class="add-tag-wrapper" style="position: relative; display: inline-flex; align-items: center;">
+                            <input type="text" id="new-tag-input" placeholder="+ Add Tag" style="width: 80px; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.1); color: var(--text-primary); transition: width 0.3s;" onfocus="this.style.width='120px'" onblur="if(!this.value){this.style.width='80px'}" onkeydown="if(event.key==='Enter') addPlaylistTag()">
+                        </div>
+                    </div>
+
                     <div class="duration-display-group">
                         <div class="duration-hms" id="duration-display-hms">04:41:40</div>
                         <button class="btn-copy-duration" id="btn-copy-duration" onclick="copyPlaylistDuration()">
@@ -1992,8 +2321,16 @@
                             <div class="mini-stat-value" id="stat-video-count">10</div>
                         </div>
                         <div class="mini-stat-item">
+                            <div class="mini-stat-label">Completed</div>
+                            <div class="mini-stat-value" id="stat-completed-count" style="color: var(--accent-cyan);">0 / 10</div>
+                        </div>
+                        <div class="mini-stat-item">
                             <div class="mini-stat-label">Avg Length</div>
                             <div class="mini-stat-value" id="stat-avg-duration">28m 10s</div>
+                        </div>
+                        <div class="mini-stat-item">
+                            <div class="mini-stat-label">Remaining</div>
+                            <div class="mini-stat-value" id="stat-remaining-duration" style="color: var(--accent-violet);">04:41:40</div>
                         </div>
                     </div>
                 </div>
@@ -2006,26 +2343,26 @@
                     </h3>
                     <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: -0.75rem; margin-bottom: 1.25rem;">Select speed to update schedule calculations below</p>
                     <div class="speed-grid" id="speed-matrix">
-                        <div class="speed-btn active" data-speed="1.0" onclick="selectSpeed(1.0, this)">
+                        <button class="speed-btn active" type="button" data-speed="1.0" onclick="selectSpeed(1.0, this)" aria-label="Analyze at 1.0x speed">
                             <span class="speed-multiplier">1.0×</span>
                             <span class="speed-time" id="speed-time-1x">4h 41m 40s</span>
-                        </div>
-                        <div class="speed-btn" data-speed="1.25" onclick="selectSpeed(1.25, this)">
+                        </button>
+                        <button class="speed-btn" type="button" data-speed="1.25" onclick="selectSpeed(1.25, this)" aria-label="Analyze at 1.25x speed">
                             <span class="speed-multiplier">1.25×</span>
                             <span class="speed-time" id="speed-time-125x">3h 45m 20s</span>
-                        </div>
-                        <div class="speed-btn" data-speed="1.5" onclick="selectSpeed(1.5, this)">
+                        </button>
+                        <button class="speed-btn" type="button" data-speed="1.5" onclick="selectSpeed(1.5, this)" aria-label="Analyze at 1.5x speed">
                             <span class="speed-multiplier">1.5×</span>
                             <span class="speed-time" id="speed-time-15x">3h 7m 47s</span>
-                        </div>
-                        <div class="speed-btn" data-speed="1.75" onclick="selectSpeed(1.75, this)">
+                        </button>
+                        <button class="speed-btn" type="button" data-speed="1.75" onclick="selectSpeed(1.75, this)" aria-label="Analyze at 1.75x speed">
                             <span class="speed-multiplier">1.75×</span>
                             <span class="speed-time" id="speed-time-175x">2h 40m 57s</span>
-                        </div>
-                        <div class="speed-btn" data-speed="2.0" onclick="selectSpeed(2.0, this)">
+                        </button>
+                        <button class="speed-btn" type="button" data-speed="2.0" onclick="selectSpeed(2.0, this)" aria-label="Analyze at 2.0x speed">
                             <span class="speed-multiplier">2.0×</span>
                             <span class="speed-time" id="speed-time-2x">2h 20m 50s</span>
-                        </div>
+                        </button>
                     </div>
                 </div>
 
@@ -2042,8 +2379,8 @@
                                 <span class="slider-value-badge" id="slider-val-display">1.5 hours</span>
                             </div>
                             <div class="slider-container">
-                                <input type="range" class="custom-slider" id="hours-slider" min="0.25" max="8" step="0.25" value="1.5" oninput="onSliderChange(this.value)">
-                                <input type="number" class="num-input-box" id="hours-num" min="0.25" max="24" step="0.25" value="1.5" oninput="onNumInputChange(this.value)">
+                                <input type="range" class="custom-slider" id="hours-slider" min="0.25" max="8" step="0.25" value="1.5" oninput="onSliderChange(this.value)" aria-label="Daily watch budget slider in hours">
+                                <input type="number" class="num-input-box" id="hours-num" min="0.25" max="24" step="0.25" value="1.5" oninput="onNumInputChange(this.value)" aria-label="Daily watch budget input in hours">
                             </div>
                         </div>
 
@@ -2082,14 +2419,25 @@
                         <div class="search-wrapper">
                             <!-- Search Icon -->
                             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                            <input type="text" id="track-search-input" placeholder="Search track titles..." oninput="filterTracksDebounced()">
+                            <input type="text" id="track-search-input" placeholder="Search track titles..." oninput="filterTracksDebounced()" aria-label="Search track titles">
                         </div>
                         
-                        <select class="select-sort" id="track-sort" onchange="sortTracks()">
+                        <select class="select-sort" id="track-sort" onchange="sortTracks()" aria-label="Sort playlist tracks">
                             <option value="default">Original Order</option>
                             <option value="duration-desc">Longest First</option>
                             <option value="duration-asc">Shortest First</option>
                         </select>
+                    </div>
+                </div>
+
+                <!-- Completion Progress Bar -->
+                <div class="playlist-progress-wrapper" style="padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); background: var(--mini-stat-bg);">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.4rem;">
+                        <span style="color: var(--text-secondary); font-weight: 600;">Completion Progress:</span>
+                        <span id="progress-percent-text" style="color: var(--accent-cyan); font-weight: 700; font-family: var(--font-mono);">0% (0/0)</span>
+                    </div>
+                    <div class="progress-bar-container" style="max-width: 100%; margin: 0; background: var(--progress-bar-track); border-radius: 4px; height: 8px; overflow: hidden;">
+                        <div class="progress-bar-fill" id="playlist-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(to right, var(--accent-violet), var(--accent-cyan)); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);"></div>
                     </div>
                 </div>
 
@@ -2123,7 +2471,7 @@
     <!-- FOOTER -->
     <footer>
         <p>VidSum Console • Open Source Standalone Tool</p>
-        <p style="margin-top: 0.25rem; font-size: 0.75rem;">Created with ❤️ and advanced agentic design principles.</p>
+        <p class="footer-attribution">Developed by <span class="developer-highlight">Aashish Kumar Anu</span> • Created with ❤️ and advanced agentic design principles.</p>
     </footer>
 
     <!-- HISTORY DRAWER (SIDEBAR) -->
@@ -2133,9 +2481,17 @@
                 <h3>History Log</h3>
                 <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="toggleHistoryDrawer(false)">Close</button>
             </div>
-            <div class="history-controls">
-                <input type="text" id="history-search-drawer" placeholder="Search history..." oninput="filterHistoryDrawer()">
-                <button class="btn-clear-history" onclick="clearHistory()">Clear All</button>
+            <div class="history-controls" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;">
+                <input type="text" id="history-search-drawer" placeholder="Search by title or tags..." oninput="filterHistoryDrawerDebounced()" aria-label="Search history by title or tags">
+                <div style="display: flex; gap: 0.5rem;">
+                    <select class="select-sort" id="history-sort-drawer" onchange="filterHistoryDrawer()" style="flex: 1; padding: 0.4rem 0.8rem; font-size: 0.8rem; height: auto; border-radius: var(--radius-sm);" aria-label="Sort drawer history list">
+                        <option value="date-added-desc">Date Analyzed (Newest)</option>
+                        <option value="date-added-asc">Date Analyzed (Oldest)</option>
+                        <option value="date-uploaded-desc">YouTube Upload Date (Newest)</option>
+                        <option value="date-uploaded-asc">YouTube Upload Date (Oldest)</option>
+                    </select>
+                    <button class="btn-clear-history" onclick="clearHistory()" style="flex-shrink: 0; padding: 0.4rem 0.8rem;">Clear All</button>
+                </div>
             </div>
             <div class="history-drawer-list" id="history-drawer-list">
                 <!-- History list items -->
@@ -2300,6 +2656,7 @@
             initTheme();
             initializeApiKey();
             loadHistory();
+            initDragAndDrop();
             showDashboard(false); // Make sure landing page is default on load/refresh
 
             // Trigger Load Playlist on Enter key in url/ID input
@@ -2616,9 +2973,21 @@
             errorSection.style.display = 'none';
             dashboardGrid.style.display = 'none';
             
+            // Security: Check input length to prevent denial-of-service/regex backtracking
+            if (input.length > 2048) {
+                showError("Invalid Input Format", "Input is too long (maximum 2048 characters).");
+                return;
+            }
+            
             const playlistId = parsePlaylistId(input);
             if (!playlistId) {
                 showError("Invalid Input Format", "Please check your playlist URL or ID. It must be a valid YouTube playlist link or alphanumeric playlist ID.");
+                return;
+            }
+
+            // Redirect demo playlist requests to local demo function instead of hitting API
+            if (playlistId === 'PLBCF2DAC1B7B8D3EC' || playlistId === 'DEMO_PLAYLIST_ID') {
+                loadDemoPlaylist();
                 return;
             }
 
@@ -2635,11 +3004,11 @@
                 state.videos = result.videos;
                 state.filteredVideos = [...result.videos];
                 
-                // Add to history
+                // Add to history (including backend's publishedAt date)
                 const totalSeconds = result.videos.reduce((sum, v) => sum + v.duration, 0);
                 const thumb = result.thumbnail || (result.videos[0]?.thumbnail || '');
                 const playlistUrl = input.startsWith('http') ? input : `https://www.youtube.com/playlist?list=${playlistId}`;
-                addToHistory(playlistId, result.title, thumb, totalSeconds, result.videos.length, playlistUrl);
+                addToHistory(playlistId, result.title, thumb, totalSeconds, result.videos.length, playlistUrl, result.publishedAt || '');
 
                 buildDashboard();
                 
@@ -2657,7 +3026,7 @@
         function loadDemoPlaylist() {
             // Load pre-configured mock playlist data
             state.playlistTitle = "Google I/O Web Development Workshop (Demo)";
-            state.playlistId = "PLBCF2DAC1B7B8D3EC"; // Mock ID
+            state.playlistId = "DEMO_PLAYLIST_ID"; // Consistent Demo ID
             state.videos = [...DEMO_VIDEOS];
             state.filteredVideos = [...DEMO_VIDEOS];
 
@@ -2665,9 +3034,9 @@
             document.getElementById('error-section').style.display = 'none';
             document.getElementById('loading-section').style.display = 'none';
 
-            // Add demo to history!
+            // Add demo to history (with static publishedAt date for demonstration)
             const totalSeconds = DEMO_VIDEOS.reduce((sum, v) => sum + v.duration, 0);
-            addToHistory("DEMO_PLAYLIST_ID", state.playlistTitle, DEMO_VIDEOS[0].thumbnail, totalSeconds, DEMO_VIDEOS.length, "https://www.youtube.com/playlist?list=PLBCF2DAC1B7B8D3EC");
+            addToHistory("DEMO_PLAYLIST_ID", state.playlistTitle, DEMO_VIDEOS[0].thumbnail, totalSeconds, DEMO_VIDEOS.length, "https://www.youtube.com/playlist?list=PLBCF2DAC1B7B8D3EC", "2024-05-15T09:00:00Z");
 
             buildDashboard();
             showDashboard(true);
@@ -2727,7 +3096,12 @@
             renderHistory();
         }
 
-        function addToHistory(id, title, thumbnail, totalSeconds, videoCount, url) {
+        function addToHistory(id, title, thumbnail, totalSeconds, videoCount, url, publishedAt = '') {
+            // Check if there was an existing entry to preserve custom fields
+            const existingEntry = state.history.find(item => item.id === id);
+            const tags = existingEntry && existingEntry.tags ? existingEntry.tags : [];
+            const isFavorite = existingEntry && existingEntry.isFavorite ? existingEntry.isFavorite : false;
+
             // Construct entry
             const newEntry = {
                 id: id,
@@ -2736,7 +3110,10 @@
                 totalDuration: totalSeconds,
                 videoCount: videoCount,
                 url: url,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                publishedAt: publishedAt || (existingEntry && existingEntry.publishedAt ? existingEntry.publishedAt : ''),
+                tags: tags,
+                isFavorite: isFavorite
             };
             
             // Remove duplicates
@@ -2771,45 +3148,130 @@
         }
 
         function renderHistory() {
-            const hs = document.getElementById('history-search');
-            const hsd = document.getElementById('history-search-drawer');
-            if (hs) hs.value = '';
-            if (hsd) hsd.value = '';
-            
+            // Reset searches to let users see full list after modification, or keep current queries
             drawHistoryGrid(state.history);
             drawHistoryDrawerList(state.history);
+            drawFavoritesGrid();
         }
 
-        function drawHistoryGrid(history) {
-            const landingGrid = document.getElementById('history-grid');
-            if (!landingGrid) return;
+        function sortHistoryItems(items, sortVal) {
+            if (sortVal === 'date-uploaded-desc') {
+                items.sort((a, b) => {
+                    const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : a.timestamp;
+                    const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : b.timestamp;
+                    return dateB - dateA;
+                });
+            } else if (sortVal === 'date-uploaded-asc') {
+                items.sort((a, b) => {
+                    const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : a.timestamp;
+                    const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : b.timestamp;
+                    return dateA - dateB;
+                });
+            } else if (sortVal === 'date-added-desc') {
+                items.sort((a, b) => b.timestamp - a.timestamp);
+            } else if (sortVal === 'date-added-asc') {
+                items.sort((a, b) => a.timestamp - b.timestamp);
+            }
+        }
+
+        function getPlaylistProgress(playlistId) {
+            try {
+                const completedObj = JSON.parse(localStorage.getItem('vidsum_completed')) || {};
+                const completedList = completedObj[playlistId] || [];
+                return completedList.length;
+            } catch (e) {
+                return 0;
+            }
+        }
+
+        function toggleFavorite(id, event) {
+            if (event) event.stopPropagation();
             
-            if (history.length === 0) {
-                landingGrid.innerHTML = `
-                    <div class="empty-history-box" style="grid-column: 1 / -1;">
-                        <svg class="empty-history-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <p style="font-weight: 600; margin-bottom: 0.25rem;">No recent playlists</p>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary);">Playlists you analyze will appear here for quick access.</p>
-                    </div>
+            const historyItem = state.history.find(item => item.id === id);
+            if (historyItem) {
+                historyItem.isFavorite = !historyItem.isFavorite;
+                localStorage.setItem('vidsum_history', JSON.stringify(state.history));
+            }
+            
+            if (state.playlistId === id) {
+                updateDashboardFavoriteBtn(historyItem ? historyItem.isFavorite : false);
+            }
+            
+            renderHistory();
+            
+            const isFav = historyItem ? historyItem.isFavorite : false;
+            showToast(isFav ? "Added to Favorites" : "Removed from Favorites");
+        }
+
+        function toggleCurrentPlaylistFavorite() {
+            if (!state.playlistId) return;
+            
+            let historyItem = state.history.find(item => item.id === state.playlistId);
+            if (!historyItem) {
+                const totalSeconds = state.videos.reduce((sum, v) => sum + v.duration, 0);
+                const thumb = state.videos[0]?.thumbnail || '';
+                const playlistUrl = `https://www.youtube.com/playlist?list=${state.playlistId}`;
+                addToHistory(state.playlistId, state.playlistTitle, thumb, totalSeconds, state.videos.length, playlistUrl);
+                historyItem = state.history.find(item => item.id === state.playlistId);
+            }
+            
+            if (historyItem) {
+                historyItem.isFavorite = !historyItem.isFavorite;
+                localStorage.setItem('vidsum_history', JSON.stringify(state.history));
+                updateDashboardFavoriteBtn(historyItem.isFavorite);
+                renderHistory();
+                showToast(historyItem.isFavorite ? "Added to Favorites" : "Removed from Favorites");
+            }
+        }
+
+        function updateDashboardFavoriteBtn(isFavorite) {
+            const btn = document.getElementById('dashboard-favorite-btn');
+            if (!btn) return;
+            
+            if (isFavorite) {
+                btn.classList.add('active');
+                btn.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#EF4444" stroke="#EF4444" stroke-width="2">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
                 `;
             } else {
-                landingGrid.innerHTML = '';
-                history.forEach(item => {
+                btn.classList.remove('active');
+                btn.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                `;
+            }
+        }
+
+        function drawFavoritesGrid() {
+            const favoritesSection = document.getElementById('favorites-section');
+            const favoritesGrid = document.getElementById('favorites-grid');
+            if (!favoritesGrid || !favoritesSection) return;
+            
+            const favorites = state.history.filter(item => item.isFavorite);
+            
+            if (favorites.length === 0) {
+                favoritesSection.style.display = 'none';
+            } else {
+                favoritesSection.style.display = 'block';
+                favoritesGrid.innerHTML = '';
+                favorites.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'history-card';
                     card.setAttribute('role', 'button');
                     card.setAttribute('tabindex', '0');
+                    card.setAttribute('data-playlist-id', item.id);
                     card.setAttribute('aria-label', `Load playlist: ${item.title}`);
                     card.onclick = (e) => {
-                        if (e.target.closest('.history-card-delete-btn')) return;
+                        if (e.target.closest('.history-card-delete-btn') || e.target.closest('.history-card-favorite-btn')) return;
                         reopenPlaylist(item);
                     };
                     card.onkeydown = (e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
-                            if (e.target.closest('.history-card-delete-btn')) return;
+                            if (e.target.closest('.history-card-delete-btn') || e.target.closest('.history-card-favorite-btn')) return;
                             reopenPlaylist(item);
                         }
                     };
@@ -2820,18 +3282,161 @@
                         hour: '2-digit',
                         minute: '2-digit'
                     });
+
+                    const formattedUploaded = item.publishedAt
+                        ? new Date(item.publishedAt).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })
+                        : 'Unknown';
                     
+                    const completedCount = getPlaylistProgress(item.id);
+                    const progressPercent = item.videoCount > 0 ? Math.round((completedCount / item.videoCount) * 100) : 0;
+                    
+                    const tagsHTML = item.tags && item.tags.length > 0
+                        ? `<div class="history-card-tags" style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem; min-height: 20px;">
+                             ${item.tags.map(tag => `<span class="history-tag">${escapeHTML(tag)}</span>`).join('')}
+                           </div>`
+                        : `<div class="history-card-tags" style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem; min-height: 20px;"></div>`;
+
                     card.innerHTML = `
                         <button class="history-card-delete-btn" title="Delete from history" aria-label="Delete ${escapeHTML(item.title)} from history" onclick="deleteHistoryItem('${escapeHTML(item.id)}', event)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                        <button class="history-card-favorite-btn active" title="Remove from Favorites" aria-label="Remove ${escapeHTML(item.title)} from Favorites" onclick="toggleFavorite('${escapeHTML(item.id)}', event)">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="#EF4444" stroke="#EF4444" stroke-width="2">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
                         </button>
                         <div class="history-card-thumb-wrapper">
                             <img class="history-card-thumb" src="${escapeHTML(item.thumbnail)}" alt="${escapeHTML(item.title)}" loading="lazy">
                         </div>
                         <div class="history-card-details">
                             <div class="history-card-title" title="${escapeHTML(item.title)}">${escapeHTML(item.title)}</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Analyzed: ${formattedDate}</div>
-                            <div class="history-card-meta">
+                            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; display: flex; flex-direction: column; gap: 2px;">
+                                <span>Uploaded: ${formattedUploaded}</span>
+                                <span>Analyzed: ${formattedDate}</span>
+                            </div>
+                            
+                            ${tagsHTML}
+
+                            <div style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 2px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-secondary);">
+                                    <span>Progress:</span>
+                                    <span class="card-progress-text">${progressPercent}% (${completedCount}/${item.videoCount})</span>
+                                </div>
+                                <div class="card-progress-bar-container">
+                                    <div class="card-progress-bar-fill" style="width: ${progressPercent}%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="history-card-meta" style="margin-top: 0.6rem;">
+                                <span class="history-card-count">${item.videoCount} videos</span>
+                                <span class="history-card-duration">${formatSecondsShort(item.totalDuration)}</span>
+                            </div>
+                        </div>
+                    `;
+                    favoritesGrid.appendChild(card);
+                });
+            }
+        }
+
+        function drawHistoryGrid(history) {
+            const landingGrid = document.getElementById('history-grid');
+            if (!landingGrid) return;
+            
+            const sortVal = document.getElementById('history-sort') ? document.getElementById('history-sort').value : 'date-added-desc';
+            let sortedHistory = [...history];
+            sortHistoryItems(sortedHistory, sortVal);
+            
+            if (sortedHistory.length === 0) {
+                landingGrid.innerHTML = `
+                    <div class="empty-history-box" style="grid-column: 1 / -1;">
+                        <svg class="empty-history-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <p style="font-weight: 600; margin-bottom: 0.25rem;">No playlists found</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">No items match your search or filter settings.</p>
+                    </div>
+                `;
+            } else {
+                landingGrid.innerHTML = '';
+                sortedHistory.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'history-card';
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('tabindex', '0');
+                    card.setAttribute('data-playlist-id', item.id);
+                    card.setAttribute('aria-label', `Load playlist: ${item.title}`);
+                    card.onclick = (e) => {
+                        if (e.target.closest('.history-card-delete-btn') || e.target.closest('.history-card-favorite-btn')) return;
+                        reopenPlaylist(item);
+                    };
+                    card.onkeydown = (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            if (e.target.closest('.history-card-delete-btn') || e.target.closest('.history-card-favorite-btn')) return;
+                            reopenPlaylist(item);
+                        }
+                    };
+                    
+                    const formattedDate = new Date(item.timestamp).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    const formattedUploaded = item.publishedAt
+                        ? new Date(item.publishedAt).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })
+                        : 'Unknown';
+                    
+                    const completedCount = getPlaylistProgress(item.id);
+                    const progressPercent = item.videoCount > 0 ? Math.round((completedCount / item.videoCount) * 100) : 0;
+                    
+                    const tagsHTML = item.tags && item.tags.length > 0
+                        ? `<div class="history-card-tags" style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem; min-height: 20px;">
+                             ${item.tags.map(tag => `<span class="history-tag">${escapeHTML(tag)}</span>`).join('')}
+                           </div>`
+                        : `<div class="history-card-tags" style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem; min-height: 20px;"></div>`;
+
+                    card.innerHTML = `
+                        <button class="history-card-delete-btn" title="Delete from history" aria-label="Delete ${escapeHTML(item.title)} from history" onclick="deleteHistoryItem('${escapeHTML(item.id)}', event)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                        <button class="history-card-favorite-btn ${item.isFavorite ? 'active' : ''}" title="${item.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}" aria-label="${item.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}" onclick="toggleFavorite('${escapeHTML(item.id)}', event)">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="${item.isFavorite ? '#EF4444' : 'none'}" stroke="${item.isFavorite ? '#EF4444' : 'currentColor'}" stroke-width="2">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </button>
+                        <div class="history-card-thumb-wrapper">
+                            <img class="history-card-thumb" src="${escapeHTML(item.thumbnail)}" alt="${escapeHTML(item.title)}" loading="lazy">
+                        </div>
+                        <div class="history-card-details">
+                            <div class="history-card-title" title="${escapeHTML(item.title)}">${escapeHTML(item.title)}</div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; display: flex; flex-direction: column; gap: 2px;">
+                                <span>Uploaded: ${formattedUploaded}</span>
+                                <span>Analyzed: ${formattedDate}</span>
+                            </div>
+                            
+                            ${tagsHTML}
+
+                            <div style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 2px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-secondary);">
+                                    <span>Progress:</span>
+                                    <span class="card-progress-text">${progressPercent}% (${completedCount}/${item.videoCount})</span>
+                                </div>
+                                <div class="card-progress-bar-container">
+                                    <div class="card-progress-bar-fill" style="width: ${progressPercent}%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="history-card-meta" style="margin-top: 0.6rem;">
                                 <span class="history-card-count">${item.videoCount} videos</span>
                                 <span class="history-card-duration">${formatSecondsShort(item.totalDuration)}</span>
                             </div>
@@ -2846,7 +3451,11 @@
             const drawerList = document.getElementById('history-drawer-list');
             if (!drawerList) return;
             
-            if (history.length === 0) {
+            const sortVal = document.getElementById('history-sort-drawer') ? document.getElementById('history-sort-drawer').value : 'date-added-desc';
+            let sortedHistory = [...history];
+            sortHistoryItems(sortedHistory, sortVal);
+            
+            if (sortedHistory.length === 0) {
                 drawerList.innerHTML = `
                     <div style="text-align: center; color: var(--text-muted); padding: 3rem 1rem; font-size: 0.85rem;">
                         No history items found.
@@ -2854,35 +3463,44 @@
                 `;
             } else {
                 drawerList.innerHTML = '';
-                history.forEach(item => {
+                sortedHistory.forEach(item => {
                     const itemEl = document.createElement('div');
                     itemEl.className = 'history-drawer-item';
                     itemEl.setAttribute('role', 'button');
                     itemEl.setAttribute('tabindex', '0');
+                    itemEl.setAttribute('data-playlist-id', item.id);
                     itemEl.setAttribute('aria-label', `Load playlist: ${item.title}`);
                     itemEl.onclick = (e) => {
-                        if (e.target.closest('.history-drawer-item-delete')) return;
+                        if (e.target.closest('.history-drawer-item-delete') || e.target.closest('.history-drawer-item-favorite')) return;
                         reopenPlaylist(item);
                         toggleHistoryDrawer(false);
                     };
                     itemEl.onkeydown = (e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
-                            if (e.target.closest('.history-drawer-item-delete')) return;
+                            if (e.target.closest('.history-drawer-item-delete') || e.target.closest('.history-drawer-item-favorite')) return;
                             reopenPlaylist(item);
                             toggleHistoryDrawer(false);
                         }
                     };
                     
+                    const completedCount = getPlaylistProgress(item.id);
+                    const progressPercent = item.videoCount > 0 ? Math.round((completedCount / item.videoCount) * 100) : 0;
+                    
                     itemEl.innerHTML = `
                         <button class="history-drawer-item-delete" title="Delete" aria-label="Delete ${escapeHTML(item.title)} from history" onclick="deleteHistoryItem('${escapeHTML(item.id)}', event)">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                         </button>
+                        <button class="history-drawer-item-favorite ${item.isFavorite ? 'active' : ''}" title="${item.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}" aria-label="${item.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}" onclick="toggleFavorite('${escapeHTML(item.id)}', event)">
+                            <svg viewBox="0 0 24 24" width="10" height="10" fill="${item.isFavorite ? '#EF4444' : 'none'}" stroke="${item.isFavorite ? '#EF4444' : 'currentColor'}" stroke-width="2.5">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </button>
                         <img class="history-drawer-item-thumb" src="${escapeHTML(item.thumbnail)}" alt="${escapeHTML(item.title)}">
                         <div class="history-drawer-item-details">
                             <div class="history-drawer-item-title" title="${escapeHTML(item.title)}">${escapeHTML(item.title)}</div>
-                            <div class="history-drawer-item-meta">
-                                <span>${item.videoCount} videos</span>
+                            <div class="history-drawer-item-meta" style="margin-top: 2px;">
+                                <span class="card-progress-text-compact" data-video-count="${item.videoCount}">${item.videoCount} videos (${progressPercent}%)</span>
                                 <span style="color: var(--accent-cyan);">${formatSecondsShort(item.totalDuration)}</span>
                             </div>
                         </div>
@@ -2894,14 +3512,38 @@
 
         function filterHistory() {
             const query = document.getElementById('history-search').value.toLowerCase().trim();
-            const filtered = state.history.filter(item => item.title.toLowerCase().includes(query));
+            const filtered = state.history.filter(item => {
+                const matchesTitle = item.title.toLowerCase().includes(query);
+                const matchesTags = item.tags && item.tags.some(tag => tag.toLowerCase().includes(query));
+                return matchesTitle || matchesTags;
+            });
             drawHistoryGrid(filtered);
+        }
+
+        let historySearchTimeout;
+        function filterHistoryDebounced() {
+            clearTimeout(historySearchTimeout);
+            historySearchTimeout = setTimeout(() => {
+                filterHistory();
+            }, 150);
         }
 
         function filterHistoryDrawer() {
             const query = document.getElementById('history-search-drawer').value.toLowerCase().trim();
-            const filtered = state.history.filter(item => item.title.toLowerCase().includes(query));
+            const filtered = state.history.filter(item => {
+                const matchesTitle = item.title.toLowerCase().includes(query);
+                const matchesTags = item.tags && item.tags.some(tag => tag.toLowerCase().includes(query));
+                return matchesTitle || matchesTags;
+            });
             drawHistoryDrawerList(filtered);
+        }
+
+        let historyDrawerSearchTimeout;
+        function filterHistoryDrawerDebounced() {
+            clearTimeout(historyDrawerSearchTimeout);
+            historyDrawerSearchTimeout = setTimeout(() => {
+                filterHistoryDrawer();
+            }, 150);
         }
 
         function reopenPlaylist(item) {
@@ -2919,6 +3561,9 @@
         // ==========================================
 
         function buildDashboard() {
+            // Load completed status for this playlist
+            loadCompletedVideos(state.playlistId);
+
             // 1. Title
             document.getElementById('playlist-title').textContent = state.playlistTitle;
 
@@ -2934,6 +3579,16 @@
             const availableVideos = state.videos.filter(v => v.duration > 0);
             const avgSeconds = availableVideos.length > 0 ? Math.round(totalSeconds / availableVideos.length) : 0;
             document.getElementById('stat-avg-duration').textContent = formatSecondsShort(avgSeconds);
+
+            // Render tags manager
+            renderDashboardTags();
+
+            // Render completion progress bar & dashboard stats
+            updatePlaylistProgressBar();
+
+            // Set dashboard favorite button state
+            const historyItem = state.history.find(item => item.id === state.playlistId);
+            updateDashboardFavoriteBtn(historyItem ? historyItem.isFavorite : false);
 
             // 3. Update Speeds matrix times
             document.getElementById('speed-time-1x').textContent = formatSecondsToDhms(totalSeconds);
@@ -2973,7 +3628,7 @@
 
             state.filteredVideos.forEach((vid, idx) => {
                 const card = document.createElement('div');
-                card.className = 'track-card';
+                card.className = `track-card ${vid.isCompleted ? 'completed' : ''}`;
                 
                 // Construct playlist item direct watch link
                 const watchUrl = state.playlistId 
@@ -2985,9 +3640,16 @@
                 const durationClass = isUnavailable ? "track-duration-badge unavailable" : "track-duration-badge";
 
                 card.innerHTML = `
-                    <div class="track-number">${vid.position + 1}</div>
-                    <div class="track-thumb-wrapper">
-                        <img class="track-thumb" src="${escapeHTML(vid.thumbnail)}" alt="${escapeHTML(vid.title)}" loading="lazy">
+                    <button class="track-checkbox-btn" type="button" aria-label="${vid.isCompleted ? 'Mark video ' + (vid.position + 1) + ' as incomplete' : 'Mark video ' + (vid.position + 1) + ' as complete'}" onclick="toggleVideoCompleted('${vid.id}', event)">
+                        <div class="track-checkbox ${vid.isCompleted ? 'checked' : ''}">
+                            <span class="track-number-text">${vid.position + 1}</span>
+                            <svg class="track-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                    <div class="track-thumb-wrapper" onclick="window.open('${escapeHTML(watchUrl)}', '_blank')">
+                        <img class="track-thumb" src="${escapeHTML(vid.thumbnail)}" alt="${escapeHTML(vid.title)}" loading="lazy" style="cursor: pointer;">
                     </div>
                     <div class="track-details">
                         <a class="track-title-link" href="${escapeHTML(watchUrl)}" target="_blank" rel="noopener" title="${escapeHTML(vid.title)}">
@@ -2997,10 +3659,12 @@
                             <span class="${durationClass}">${escapeHTML(durationText)}</span>
                         </div>
                     </div>
-                    <!-- External Link Arrow -->
-                    <svg class="track-external-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                    </svg>
+                    <!-- External Link Arrow wrapping clickable link -->
+                    <a href="${escapeHTML(watchUrl)}" target="_blank" rel="noopener" class="track-external-link" aria-label="Watch video on YouTube">
+                        <svg class="track-external-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="opacity: 1;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                    </a>
                 `;
                 container.appendChild(card);
             });
@@ -3072,8 +3736,9 @@
         }
 
         function runSimulations() {
-            const totalOriginalSeconds = state.videos.reduce((sum, v) => sum + v.duration, 0);
-            const adjustedSeconds = totalOriginalSeconds / state.activeSpeed;
+            // Simulator calculates remaining days based on uncompleted video durations!
+            const remainingOriginalSeconds = state.videos.reduce((sum, v) => sum + (v.isCompleted ? 0 : v.duration), 0);
+            const adjustedSeconds = remainingOriginalSeconds / state.activeSpeed;
 
             // Display speed multiplier in planner results box
             document.getElementById('sim-active-speed').textContent = `${state.activeSpeed.toFixed(2)}×`;
@@ -3081,6 +3746,11 @@
 
             // Date math
             const hoursPerDay = state.watchHoursPerDay;
+            if (remainingOriginalSeconds === 0) {
+                document.getElementById('sim-days-needed').textContent = "0 days";
+                document.getElementById('sim-completion-date').textContent = "Playlist completed! 🎉";
+                return;
+            }
             if (hoursPerDay <= 0) {
                 document.getElementById('sim-days-needed').textContent = "Never";
                 document.getElementById('sim-completion-date').textContent = "Watch hours must be greater than zero.";
@@ -3101,6 +3771,218 @@
             
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('sim-completion-date').textContent = targetDate.toLocaleDateString(undefined, dateOptions);
+        }
+
+        function loadCompletedVideos(playlistId) {
+            try {
+                const completed = JSON.parse(localStorage.getItem('vidsum_completed')) || {};
+                const list = completed[playlistId] || [];
+                state.videos.forEach(v => {
+                    v.isCompleted = list.includes(v.id);
+                });
+            } catch (e) {
+                console.error("Failed to load completed videos", e);
+            }
+        }
+
+        function toggleVideoCompleted(videoId, event) {
+            if (event) event.stopPropagation();
+            
+            const video = state.videos.find(v => v.id === videoId);
+            if (!video) return;
+            
+            video.isCompleted = !video.isCompleted;
+            
+            // Save to localStorage
+            try {
+                const completed = JSON.parse(localStorage.getItem('vidsum_completed')) || {};
+                if (!completed[state.playlistId]) {
+                    completed[state.playlistId] = [];
+                }
+                
+                if (video.isCompleted) {
+                    if (!completed[state.playlistId].includes(videoId)) {
+                        completed[state.playlistId].push(videoId);
+                    }
+                } else {
+                    completed[state.playlistId] = completed[state.playlistId].filter(id => id !== videoId);
+                }
+                
+                localStorage.setItem('vidsum_completed', JSON.stringify(completed));
+            } catch (e) {
+                console.error("Failed to save completed videos", e);
+            }
+            
+            // Update Dashboard UI states
+            updatePlaylistProgressBar();
+            
+            // Re-render tracks list (to apply the strike-through, etc.)
+            filterAndDrawTracks();
+            
+            // Re-run simulations using new remaining time
+            runSimulations();
+            
+            // Perform high-performance targeted DOM update instead of full rebuild
+            updateDOMHistoryProgress(state.playlistId);
+        }
+
+        function updateDOMHistoryProgress(playlistId) {
+            const completedCount = getPlaylistProgress(playlistId);
+            const historyItem = state.history.find(item => item.id === playlistId);
+            if (!historyItem) return;
+            const totalCount = historyItem.videoCount;
+            const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            
+            const elements = document.querySelectorAll(`[data-playlist-id="${playlistId}"]`);
+            elements.forEach(el => {
+                if (el.classList.contains('history-card')) {
+                    const progressTextEl = el.querySelector('.card-progress-text');
+                    if (progressTextEl) {
+                        progressTextEl.textContent = `${progressPercent}% (${completedCount}/${totalCount})`;
+                    }
+                    const fillEl = el.querySelector('.card-progress-bar-fill');
+                    if (fillEl) {
+                        fillEl.style.width = `${progressPercent}%`;
+                    }
+                }
+                if (el.classList.contains('history-drawer-item')) {
+                    const compactTextEl = el.querySelector('.card-progress-text-compact');
+                    if (compactTextEl) {
+                        compactTextEl.textContent = `${totalCount} videos (${progressPercent}%)`;
+                    }
+                }
+            });
+        }
+
+        function updatePlaylistProgressBar() {
+            const completedCount = state.videos.filter(v => v.isCompleted).length;
+            const totalCount = state.videos.length;
+            const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            
+            // Update progress text
+            const pctText = document.getElementById('progress-percent-text');
+            if (pctText) {
+                pctText.textContent = `${progressPercent}% (${completedCount}/${totalCount})`;
+            }
+            
+            // Update progress bar fill width
+            const fill = document.getElementById('playlist-progress-fill');
+            if (fill) {
+                fill.style.width = `${progressPercent}%`;
+            }
+
+            // Update stats grid values on the Dashboard
+            const completedStatVal = document.getElementById('stat-completed-count');
+            if (completedStatVal) {
+                completedStatVal.textContent = `${completedCount} / ${totalCount}`;
+            }
+
+            const remainingSeconds = state.videos.reduce((sum, v) => sum + (v.isCompleted ? 0 : v.duration), 0);
+            const remainingDurationVal = document.getElementById('stat-remaining-duration');
+            if (remainingDurationVal) {
+                remainingDurationVal.textContent = formatSecondsToHMS(remainingSeconds);
+            }
+        }
+
+        // Custom tags manager functions
+        function addPlaylistTag() {
+            const input = document.getElementById('new-tag-input');
+            const tagValue = input.value.trim().toLowerCase();
+            if (!tagValue || !state.playlistId) return;
+            
+            let historyItem = state.history.find(item => item.id === state.playlistId);
+            if (!historyItem) {
+                const totalSeconds = state.videos.reduce((sum, v) => sum + v.duration, 0);
+                const thumb = state.videos[0]?.thumbnail || '';
+                const playlistUrl = `https://www.youtube.com/playlist?list=${state.playlistId}`;
+                addToHistory(state.playlistId, state.playlistTitle, thumb, totalSeconds, state.videos.length, playlistUrl);
+                historyItem = state.history.find(item => item.id === state.playlistId);
+            }
+            
+            if (historyItem) {
+                if (!historyItem.tags) historyItem.tags = [];
+                if (!historyItem.tags.includes(tagValue)) {
+                    historyItem.tags.push(tagValue);
+                    localStorage.setItem('vidsum_history', JSON.stringify(state.history));
+                    renderDashboardTags();
+                    renderHistory();
+                    showToast(`Added tag: ${tagValue}`);
+                } else {
+                    showToast("Tag already exists", true);
+                }
+            }
+            input.value = '';
+        }
+
+        function removePlaylistTag(tagValue) {
+            if (!state.playlistId) return;
+            
+            const historyItem = state.history.find(item => item.id === state.playlistId);
+            if (historyItem && historyItem.tags) {
+                historyItem.tags = historyItem.tags.filter(t => t !== tagValue);
+                localStorage.setItem('vidsum_history', JSON.stringify(state.history));
+                renderDashboardTags();
+                renderHistory();
+                showToast(`Removed tag: ${tagValue}`);
+            }
+        }
+
+        function renderDashboardTags() {
+            const listContainer = document.getElementById('playlist-tags-list');
+            if (!listContainer) return;
+            
+            listContainer.innerHTML = '';
+            
+            const historyItem = state.history.find(item => item.id === state.playlistId);
+            const tags = historyItem && historyItem.tags ? historyItem.tags : [];
+            
+            if (tags.length === 0) {
+                listContainer.innerHTML = `<span style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">No tags added</span>`;
+            } else {
+                tags.forEach(tag => {
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'playlist-tag';
+                    tagEl.innerHTML = `
+                        ${escapeHTML(tag)}
+                        <button type="button" class="playlist-tag-remove" onclick="removePlaylistTag('${escapeHTML(tag)}')" title="Remove tag" aria-label="Remove tag ${escapeHTML(tag)}">&times;</button>
+                    `;
+                    listContainer.appendChild(tagEl);
+                });
+            }
+        }
+
+        // Drag and drop initializer
+        function initDragAndDrop() {
+            const wrapper = document.querySelector('.playlist-input-wrapper');
+            const input = document.getElementById('playlist-url-input');
+            if (!wrapper || !input) return;
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                wrapper.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    wrapper.classList.add('drag-over');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                wrapper.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    wrapper.classList.remove('drag-over');
+                }, false);
+            });
+
+            wrapper.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                let url = dt.getData('text/plain') || dt.getData('text/uri-list');
+                
+                if (url) {
+                    input.value = url.trim();
+                    showToast("URL Dropped! Analyzing...");
+                    analyzePlaylist();
+                }
+            }, false);
         }
 
         // ==========================================
