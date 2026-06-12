@@ -392,11 +392,48 @@
             height: 8px;
             border-radius: 50%;
             background: var(--text-muted);
+            transition: var(--transition-smooth);
         }
 
-        .api-status-dot.active {
+        .api-status-dot.server {
             background: var(--accent-cyan);
             box-shadow: 0 0 8px var(--accent-cyan);
+        }
+
+        .api-status-dot.custom {
+            background: #10B981;
+            box-shadow: 0 0 8px #10B981;
+        }
+
+        .api-mode-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.9rem;
+        }
+
+        .api-mode-label {
+            color: var(--text-secondary);
+        }
+
+        .api-mode-val {
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .api-mode-val.server {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+        }
+
+        .api-mode-val.custom {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         /* API Settings Drawer */
@@ -408,7 +445,7 @@
         }
 
         .api-drawer.open {
-            max-height: 250px;
+            max-height: 520px;
             margin-bottom: 2rem;
         }
 
@@ -1712,6 +1749,29 @@
             animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
+        /* Focus styles for keyboard accessibility */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        [tabindex="0"]:focus-visible {
+            outline: 2px solid var(--accent-violet);
+            outline-offset: 2px;
+        }
+
+        /* Show delete buttons on focus/focus-within for keyboard users */
+        .history-card:hover .history-card-delete-btn,
+        .history-card-delete-btn:focus,
+        .history-card:focus-within .history-card-delete-btn {
+            opacity: 1;
+        }
+
+        .history-drawer-item:hover .history-drawer-item-delete,
+        .history-drawer-item-delete:focus,
+        .history-drawer-item:focus-within .history-drawer-item-delete {
+            opacity: 1;
+        }
+
         /* Mobile Adaptations */
         @media (max-width: 768px) {
             .api-input-group {
@@ -1723,11 +1783,11 @@
                 justify-content: center;
             }
             .tracklist-panel {
-                max-height: none !important;
+                max-height: 700px !important;
             }
             .track-container {
-                overflow-y: visible !important;
-                max-height: none !important;
+                overflow-y: auto !important;
+                max-height: 450px !important;
             }
             .history-drawer {
                 width: 100%;
@@ -1791,20 +1851,40 @@
         </header>
 
         <!-- API DRAWER -->
+        <!-- API DRAWER (Advanced Settings) -->
         <div class="api-drawer" id="api-drawer">
             <div class="api-card">
                 <div class="api-card-header">
-                    <h3>Configure YouTube API Key</h3>
+                    <h3>Advanced Settings</h3>
                     <button class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="toggleApiDrawer()">Close</button>
                 </div>
+                
+                <div class="api-mode-indicator">
+                    <span class="api-mode-label">API Key Mode:</span>
+                    <span id="api-mode-status" class="api-mode-val server">Server API Key</span>
+                </div>
+
                 <div class="api-input-group">
-                    <input type="password" id="api-key-input" placeholder="Paste your YouTube Data API v3 Key...">
+                    <input type="password" id="api-key-input" placeholder="Paste your custom YouTube Data API v3 Key...">
                     <button class="btn" onclick="saveApiKey()">Save Key</button>
                     <button class="btn btn-danger" id="btn-remove-api-key" onclick="removeApiKey()" style="display: none;">Remove Key</button>
                 </div>
-                <div class="api-info-text">
-                    Your key is stored securely in your browser's local storage.
-                    Don't have a key? Learn how to get a <a href="https://developers.google.com/youtube/v3/getting-started" target="_blank" rel="noopener">YouTube API Key</a>.
+                
+                <div class="api-info-text" style="margin-bottom: 1.25rem;">
+                    <strong>Mode 1 (Default):</strong> Uses the server's API key. No configuration needed.<br>
+                    <strong>Mode 2 (Custom):</strong> Paste your own YouTube API Key above. Stored locally in your browser.
+                </div>
+
+                <div style="border-top: 1px solid var(--border-color); padding-top: 1.25rem; margin-top: 1.25rem;">
+                    <h4 style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--text-primary);">Custom Backend Proxy URL (Optional)</h4>
+                    <div class="api-input-group">
+                        <input type="text" id="backend-url-input" placeholder="e.g. https://your-backend-server.com">
+                        <button class="btn" onclick="saveBackendUrl()">Save URL</button>
+                        <button class="btn btn-danger" id="btn-remove-backend-url" onclick="removeBackendUrl()" style="display: none;">Reset</button>
+                    </div>
+                    <div class="api-info-text">
+                        Specify a custom backend proxy server if running the frontend separately (e.g. on Vercel). Leave blank to auto-detect.
+                    </div>
                 </div>
             </div>
         </div>
@@ -1837,7 +1917,7 @@
         <section class="loading-section" id="loading-section">
             <div class="spinner-outer"></div>
             <h3 class="loading-title">Extracting Playlist Telemetry</h3>
-            <p class="loading-subtitle" id="loading-status">Querying YouTube Data API...</p>
+            <p class="loading-subtitle" id="loading-status" role="status" aria-live="polite">Querying YouTube Data API...</p>
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" id="loading-progress-bar"></div>
             </div>
@@ -2002,7 +2082,7 @@
                         <div class="search-wrapper">
                             <!-- Search Icon -->
                             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                            <input type="text" id="track-search-input" placeholder="Search track titles..." oninput="filterTracks()">
+                            <input type="text" id="track-search-input" placeholder="Search track titles..." oninput="filterTracksDebounced()">
                         </div>
                         
                         <select class="select-sort" id="track-sort" onchange="sortTracks()">
@@ -2092,7 +2172,8 @@
             filteredVideos: [],
             activeSpeed: 1.0,
             watchHoursPerDay: 1.5,
-            isLoading: false
+            isLoading: false,
+            history: [] // Cached history list to optimize search/filters
         };
 
         // ==========================================
@@ -2205,6 +2286,15 @@
             }
         ];
 
+        // Debounce search function to avoid DOM jank on fast typing
+        let trackSearchTimeout;
+        function filterTracksDebounced() {
+            clearTimeout(trackSearchTimeout);
+            trackSearchTimeout = setTimeout(() => {
+                filterTracks();
+            }, 150);
+        }
+
         // Initialize App on window load
         window.addEventListener('load', () => {
             initTheme();
@@ -2231,6 +2321,16 @@
                     }
                 });
             }
+
+            // Add onblur event to reset watch hours field if empty/invalid
+            const hoursNumInput = document.getElementById('hours-num');
+            if (hoursNumInput) {
+                hoursNumInput.addEventListener('blur', (e) => {
+                    if (!e.target.value || parseFloat(e.target.value) <= 0) {
+                        e.target.value = state.watchHoursPerDay;
+                    }
+                });
+            }
         });
 
         // ==========================================
@@ -2245,23 +2345,38 @@
         }
 
         function initializeApiKey() {
-            // Check if user set key in HTML code
-            if (DEFAULT_API_KEY && DEFAULT_API_KEY !== "YOUR_YOUTUBE_API_KEY_HERE" && DEFAULT_API_KEY.trim() !== "") {
-                state.apiKey = DEFAULT_API_KEY;
-                updateApiStatusBadge(true, "API Key (Hardcoded)");
-                document.getElementById('api-key-input').value = DEFAULT_API_KEY;
-                updateRemoveKeyButtonVisibility(true);
+            // Read backend url
+            const savedUrl = localStorage.getItem('vidsum_backend_url');
+            if (savedUrl) {
+                document.getElementById('backend-url-input').value = savedUrl;
+                updateBackendUrlControls(true);
             } else {
-                // Read from localStorage
-                const savedKey = localStorage.getItem('yt_playlist_duration_key');
-                if (savedKey) {
-                    state.apiKey = savedKey;
-                    updateApiStatusBadge(true, "API Key Active");
-                    document.getElementById('api-key-input').value = savedKey;
-                    updateRemoveKeyButtonVisibility(true);
-                } else {
-                    updateApiStatusBadge(false, "API Key Missing");
-                    updateRemoveKeyButtonVisibility(false);
+                updateBackendUrlControls(false);
+            }
+
+            // Read from localStorage
+            const savedKey = localStorage.getItem('yt_playlist_duration_key');
+            const apiModeStatus = document.getElementById('api-mode-status');
+
+            if (savedKey) {
+                state.apiKey = savedKey;
+                document.getElementById('api-key-input').value = savedKey;
+                updateApiStatusBadge(true, "Custom API Key");
+                updateRemoveKeyButtonVisibility(true);
+                
+                if (apiModeStatus) {
+                    apiModeStatus.textContent = "Custom API Key";
+                    apiModeStatus.className = "api-mode-val custom";
+                }
+            } else {
+                state.apiKey = '';
+                document.getElementById('api-key-input').value = '';
+                updateApiStatusBadge(false, "Server API Key");
+                updateRemoveKeyButtonVisibility(false);
+                
+                if (apiModeStatus) {
+                    apiModeStatus.textContent = "Server API Key";
+                    apiModeStatus.className = "api-mode-val server";
                 }
             }
         }
@@ -2271,9 +2386,16 @@
             if (val) {
                 localStorage.setItem('yt_playlist_duration_key', val);
                 state.apiKey = val;
-                updateApiStatusBadge(true, "API Key Active");
+                updateApiStatusBadge(true, "Custom API Key");
                 updateRemoveKeyButtonVisibility(true);
-                showToast("API Key saved successfully!");
+                
+                const apiModeStatus = document.getElementById('api-mode-status');
+                if (apiModeStatus) {
+                    apiModeStatus.textContent = "Custom API Key";
+                    apiModeStatus.className = "api-mode-val custom";
+                }
+                
+                showToast("Custom API Key saved successfully!");
                 toggleApiDrawer(false);
             } else {
                 removeApiKey();
@@ -2284,20 +2406,60 @@
             localStorage.removeItem('yt_playlist_duration_key');
             state.apiKey = '';
             document.getElementById('api-key-input').value = '';
-            updateApiStatusBadge(false, "API Key Missing");
+            updateApiStatusBadge(false, "Server API Key");
             updateRemoveKeyButtonVisibility(false);
-            showToast("API Key removed.");
+            
+            const apiModeStatus = document.getElementById('api-mode-status');
+            if (apiModeStatus) {
+                apiModeStatus.textContent = "Server API Key";
+                apiModeStatus.className = "api-mode-val server";
+            }
+            
+            showToast("Custom API Key removed. Using Server API Key.");
             toggleApiDrawer(false);
         }
 
-        function updateApiStatusBadge(isActive, text) {
+        function saveBackendUrl() {
+            const val = document.getElementById('backend-url-input').value.trim();
+            if (val) {
+                if (!val.startsWith('http://') && !val.startsWith('https://')) {
+                    showToast("Error: URL must start with http:// or https://");
+                    return;
+                }
+                localStorage.setItem('vidsum_backend_url', val);
+                showToast("Backend Proxy URL saved!");
+                updateBackendUrlControls(true);
+            } else {
+                removeBackendUrl();
+            }
+        }
+
+        function removeBackendUrl() {
+            localStorage.removeItem('vidsum_backend_url');
+            document.getElementById('backend-url-input').value = '';
+            showToast("Backend URL reset to auto-detect.");
+            updateBackendUrlControls(false);
+        }
+
+        function updateBackendUrlControls(hasUrl) {
+            const btnRemove = document.getElementById('btn-remove-backend-url');
+            if (btnRemove) {
+                btnRemove.style.display = hasUrl ? 'inline-flex' : 'none';
+            }
+        }
+
+        function updateApiStatusBadge(isCustom, text) {
             const dot = document.getElementById('api-status-dot');
             const statusText = document.getElementById('api-status-text');
-            if (isActive) {
-                dot.classList.add('active');
-                statusText.textContent = text;
-            } else {
-                dot.classList.remove('active');
+            if (dot) {
+                dot.className = 'api-status-dot'; // Reset classes
+                if (isCustom) {
+                    dot.classList.add('custom');
+                } else {
+                    dot.classList.add('server');
+                }
+            }
+            if (statusText) {
                 statusText.textContent = text;
             }
         }
@@ -2317,165 +2479,91 @@
         // ==========================================
 
         function parsePlaylistId(input) {
-            input = input.trim();
             if (!input) return null;
+            input = input.trim();
             
-            // Check if is 18-40 length ID directly
-            if (/^[A-Za-z0-9_-]{18,40}$/.test(input)) {
-                return input;
-            }
+            let playlistId = null;
             
-            try {
-                const url = new URL(input);
-                let listId = url.searchParams.get('list');
-                if (listId) return listId;
-
-                const pathSegments = url.pathname.split('/');
-                for (let i = 0; i < pathSegments.length; i++) {
-                    if (pathSegments[i] === 'playlist' && pathSegments[i+1]) {
-                        return pathSegments[i+1];
+            // Check if is 18-56 length ID directly
+            if (/^[A-Za-z0-9_-]{18,56}$/.test(input)) {
+                playlistId = input;
+            } else {
+                try {
+                    const url = new URL(input);
+                    let listId = url.searchParams.get('list');
+                    if (listId) {
+                        playlistId = listId;
+                    } else {
+                        const pathSegments = url.pathname.split('/');
+                        for (let i = 0; i < pathSegments.length; i++) {
+                            if (pathSegments[i] === 'playlist' && pathSegments[i+1]) {
+                                playlistId = pathSegments[i+1];
+                                break;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Attempt regex match if not a fully qualified URL
+                    const match = input.match(/[?&]list=([^#\&\?]+)/);
+                    if (match && match[1]) {
+                        playlistId = match[1];
                     }
                 }
-            } catch (e) {
-                // Attempt regex match if not a fully qualified URL
-                const match = input.match(/[?&]list=([^#\&\?]+)/);
-                if (match && match[1]) {
-                    return match[1];
-                }
+            }
+            
+            // Validate the extracted ID to prevent injection/abuse
+            if (playlistId && /^[A-Za-z0-9_-]{18,56}$/.test(playlistId)) {
+                return playlistId;
             }
             
             return null;
         }
 
-        // ISO 8601 Durations to Seconds Converter (PT1H2M10S -> 3730)
-        function parseISO8601Duration(durationStr) {
-            if (!durationStr) return 0;
-            const regex = /^P(?:([0-9]+)D)?(?:T(?:([0-9]+)H)?(?:([0-9]+)M)?(?:([0-9]+)S)?)?$/;
-            const matches = durationStr.match(regex);
-            if (!matches) return 0;
-            
-            const days = parseInt(matches[1] || 0, 10);
-            const hours = parseInt(matches[2] || 0, 10);
-            const minutes = parseInt(matches[3] || 0, 10);
-            const seconds = parseInt(matches[4] || 0, 10);
-            
-            return (days * 86400) + (hours * 3600) + (minutes * 60) + seconds;
-        }
-
         async function fetchPlaylistItems(playlistId, apiKey) {
-            let allItems = [];
-            let nextPageToken = '';
-            let hasNextPage = true;
-            let playlistTitle = "YouTube Playlist";
-            let playlistThumbnail = "";
+            updateLoadingStatus("Connecting to backend proxy server...", 20);
             
-            // Step 1: Try fetching the Playlist general info
-            try {
-                const plistUrl = `https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=${playlistId}&key=${apiKey}`;
-                const plistRes = await fetch(plistUrl);
-                if (plistRes.ok) {
-                    const plistData = await plistRes.json();
-                    if (plistData.items && plistData.items.length > 0) {
-                        const snippet = plistData.items[0].snippet;
-                        playlistTitle = snippet.title;
-                        playlistThumbnail = snippet.thumbnails?.medium?.url || snippet.thumbnails?.default?.url || snippet.thumbnails?.high?.url || "";
-                    }
-                }
-            } catch (e) {
-                console.warn("Could not retrieve playlist snippet, using default name.");
-            }
-
-            // Step 2: Retrieve all items page-by-page (50 per batch)
-            while (hasNextPage) {
-                updateLoadingStatus(`Fetching track metadata (Retrieved ${allItems.length} so far)...`, 30);
-                const listUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${playlistId}&maxResults=50&pageToken=${nextPageToken}&key=${apiKey}`;
-                
-                const response = await fetch(listUrl);
-                if (!response.ok) {
-                    let errMsg = "YouTube API error occurred";
-                    try {
-                        const errData = await response.json();
-                        errMsg = errData.error?.message || errMsg;
-                    } catch (e) {
-                        errMsg = `HTTP Error ${response.status}: ${response.statusText}`;
-                    }
-                    throw new Error(errMsg);
-                }
-                
-                const data = await response.json();
-                if (!data.items || data.items.length === 0) {
-                    break;
-                }
-                
-                // Keep relevant fields
-                const pageItems = data.items.map(item => ({
-                    id: item.contentDetails.videoId,
-                    title: item.snippet.title,
-                    thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || 'https://via.placeholder.com/320x180?text=No+Thumbnail',
-                    position: item.snippet.position || 0,
-                    duration: 0 // Will populate in the next API step
-                }));
-                
-                allItems = allItems.concat(pageItems);
-                nextPageToken = data.nextPageToken || '';
-                hasNextPage = !!nextPageToken;
-            }
-
-            if (allItems.length === 0) {
-                throw new Error("This playlist contains no videos or is private.");
-            }
-
-            // Step 3: Fetch exact durations for all videos in parallel batches of 50
-            const batchSize = 50;
-            const batchPromises = [];
-            const totalBatches = Math.ceil(allItems.length / batchSize);
-            let finishedBatches = 0;
-
-            for (let i = 0; i < allItems.length; i += batchSize) {
-                const batch = allItems.slice(i, i + batchSize);
-                const ids = batch.map(b => b.id).join(',');
-                
-                const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${ids}&key=${apiKey}`;
-                batchPromises.push((async (currentBatch) => {
-                    const videoResponse = await fetch(videoUrl);
-                    if (!videoResponse.ok) {
-                        let errMsg = "Failed to retrieve durations.";
-                        try {
-                            const errData = await videoResponse.json();
-                            errMsg = errData.error?.message || errMsg;
-                        } catch (e) {
-                            errMsg = `HTTP Error ${videoResponse.status}: ${videoResponse.statusText}`;
-                        }
-                        throw new Error(errMsg);
-                    }
-                    
-                    const videoData = await videoResponse.json();
-                    const durationMap = {};
-                    if (videoData.items) {
-                        videoData.items.forEach(v => {
-                            durationMap[v.id] = parseISO8601Duration(v.contentDetails.duration);
-                        });
-                    }
-                    
-                    // Map the results back to the items array
-                    currentBatch.forEach(b => {
-                        b.duration = durationMap[b.id] || 0;
-                    });
-
-                    finishedBatches++;
-                    const progressPct = 30 + Math.floor((finishedBatches / totalBatches) * 70);
-                    updateLoadingStatus(`Fetching video durations... batch ${finishedBatches} of ${totalBatches}`, progressPct);
-                })(batch));
-            }
-
-            // Await all parallel batch fetches
-            await Promise.all(batchPromises);
-
-            return {
-                title: playlistTitle,
-                thumbnail: playlistThumbnail,
-                videos: allItems
+            const headers = {
+                'Content-Type': 'application/json'
             };
+            if (apiKey) {
+                headers['X-Custom-API-Key'] = apiKey;
+            }
+
+            // Backend API base URL detection
+            // Priority:
+            // 1. Saved backend URL in localStorage
+            // 2. Localhost fallback if running locally
+            // 3. Relative path (same origin) if served from backend
+            let apiBase = localStorage.getItem('vidsum_backend_url') || '';
+            if (!apiBase) {
+                if (window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')) {
+                    apiBase = 'http://localhost:5000';
+                } else {
+                    apiBase = ''; // Same origin
+                }
+            }
+            
+            const url = `${apiBase}/api/playlist?url=${encodeURIComponent(playlistId)}`;
+            
+            updateLoadingStatus("Fetching playlist metadata & video durations from backend proxy...", 45);
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: headers
+            });
+
+            if (!response.ok) {
+                let errMsg = "Backend API error occurred";
+                try {
+                    const errData = await response.json();
+                    errMsg = errData.error || errMsg;
+                } catch (e) {
+                    errMsg = `HTTP Error ${response.status}: ${response.statusText}`;
+                }
+                throw new Error(errMsg);
+            }
+
+            updateLoadingStatus("Processing playlist statistics...", 90);
+            return await response.json();
         }
 
         function setLoading(isLoading) {
@@ -2534,12 +2622,7 @@
                 return;
             }
 
-            if (!state.apiKey) {
-                showError("YouTube API Key Required", "To fetch live YouTube data, you must provide an API Key. Click 'Set API Key' in the header to enter one, or select 'Load a Demo Interactive Playlist' below to test the app features.");
-                toggleApiDrawer(true);
-                return;
-            }
-
+            // We no longer check if state.apiKey is set since the backend provides a default Server API Key.
             state.playlistId = playlistId;
             loadingSection.style.display = 'block';
             updateLoadingStatus("Connecting to YouTube APIs...", 10);
@@ -2636,20 +2719,15 @@
         // HISTORY STATE & PERSISTENCE
         // ==========================================
         function loadHistory() {
+            try {
+                state.history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
+            } catch (e) {
+                state.history = [];
+            }
             renderHistory();
         }
 
         function addToHistory(id, title, thumbnail, totalSeconds, videoCount, url) {
-            let history = [];
-            try {
-                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
-            } catch (e) {
-                history = [];
-            }
-            
-            // Remove duplicates
-            history = history.filter(item => item.id !== id);
-            
             // Construct entry
             const newEntry = {
                 id: id,
@@ -2661,35 +2739,31 @@
                 timestamp: Date.now()
             };
             
-            history.unshift(newEntry);
+            // Remove duplicates
+            state.history = state.history.filter(item => item.id !== id);
+            state.history.unshift(newEntry);
             
             // Limit to 50
-            if (history.length > 50) {
-                history = history.slice(0, 50);
+            if (state.history.length > 50) {
+                state.history = state.history.slice(0, 50);
             }
             
-            localStorage.setItem('vidsum_history', JSON.stringify(history));
+            localStorage.setItem('vidsum_history', JSON.stringify(state.history));
             renderHistory();
         }
 
         function deleteHistoryItem(id, event) {
             if (event) event.stopPropagation();
             
-            let history = [];
-            try {
-                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
-            } catch (e) {
-                history = [];
-            }
-            
-            history = history.filter(item => item.id !== id);
-            localStorage.setItem('vidsum_history', JSON.stringify(history));
+            state.history = state.history.filter(item => item.id !== id);
+            localStorage.setItem('vidsum_history', JSON.stringify(state.history));
             renderHistory();
             showToast("Item deleted from history.");
         }
 
         function clearHistory() {
             if (confirm("Are you sure you want to clear all history?")) {
+                state.history = [];
                 localStorage.removeItem('vidsum_history');
                 renderHistory();
                 showToast("History cleared.");
@@ -2697,20 +2771,13 @@
         }
 
         function renderHistory() {
-            let history = [];
-            try {
-                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
-            } catch (e) {
-                history = [];
-            }
-            
             const hs = document.getElementById('history-search');
             const hsd = document.getElementById('history-search-drawer');
             if (hs) hs.value = '';
             if (hsd) hsd.value = '';
             
-            drawHistoryGrid(history);
-            drawHistoryDrawerList(history);
+            drawHistoryGrid(state.history);
+            drawHistoryDrawerList(state.history);
         }
 
         function drawHistoryGrid(history) {
@@ -2827,25 +2894,13 @@
 
         function filterHistory() {
             const query = document.getElementById('history-search').value.toLowerCase().trim();
-            let history = [];
-            try {
-                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
-            } catch (e) {
-                history = [];
-            }
-            const filtered = history.filter(item => item.title.toLowerCase().includes(query));
+            const filtered = state.history.filter(item => item.title.toLowerCase().includes(query));
             drawHistoryGrid(filtered);
         }
 
         function filterHistoryDrawer() {
             const query = document.getElementById('history-search-drawer').value.toLowerCase().trim();
-            let history = [];
-            try {
-                history = JSON.parse(localStorage.getItem('vidsum_history')) || [];
-            } catch (e) {
-                history = [];
-            }
-            const filtered = history.filter(item => item.title.toLowerCase().includes(query));
+            const filtered = state.history.filter(item => item.title.toLowerCase().includes(query));
             drawHistoryDrawerList(filtered);
         }
 
